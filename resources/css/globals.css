@@ -1,0 +1,70 @@
+@import './forms';
+@import './tables';
+
+ul,
+ol {
+    @apply list-outside;
+
+    li {
+        @apply ml-8;
+    }
+}
+
+ul {
+    @apply list-disc;
+}
+
+ol {
+    @apply list-decimal;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    line-height: 1.2;
+}
+
+p {
+    line-height: 1.5;
+}
+
+.image {
+    img {
+        @apply h-full w-full object-cover;
+    }
+}
+
+.GuestLayout,
+.AppLayout {
+    .container-fluid {
+        @apply px-4 lg:px-16 py-4;
+    }
+}
+
+.GuestLayout {
+    @apply bg-background text-foreground;
+}
+
+.AppLayout {
+    @apply px-4 lg:px-16 py-4;
+
+    .app-header {
+        @apply grid lg:grid-cols-3 gap-8 mb-4;
+
+        .search {
+            @apply lg:flex lg:justify-center;
+            input {
+                @apply border border-border py-1 px-4 rounded-sm;
+            }
+        }
+
+        .action {
+            @apply lg:justify-self-end;
+        }
+    }
+}
+
+/* * {
+    outline: 1px solid grey;
+} */
