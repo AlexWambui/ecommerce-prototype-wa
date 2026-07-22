@@ -13,8 +13,21 @@ class ProductCategory extends Model
 
     protected $guarded = [];
 
+    protected $appends = [
+        'thumbnail_url',
+    ];
+
     public function products(): HasMany
     {
         return $this->hasMany(Product::class, 'product_category_id');
+    }
+
+    public function getThumbnailUrlAttribute(): string
+    {
+        if (!$this->image) {
+            return asset('/assets/images/default-image.png');
+        }
+
+        return asset("storage/product-categories/{$this->name}");
     }
 }
