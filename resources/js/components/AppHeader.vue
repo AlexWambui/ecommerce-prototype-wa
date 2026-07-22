@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Menu, Search, Users } from '@lucide/vue';
+import { BookOpen, Folder, LayoutGrid, Menu, Search, Users, Barcode } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
@@ -39,6 +39,7 @@ import type { BreadcrumbItem, NavItem } from '@/types';
 import { dashboard } from '@/routes';
 
 import userRoutes from '@/routes/users';
+import productRoutes from '@/routes/products';
 
 type Props = {
     breadcrumbs?: BreadcrumbItem[];
@@ -76,6 +77,11 @@ const mainNavItems = computed(() => {
                 href: userRoutes.index(),
                 icon: Users
             },
+            {
+                title: 'Products',
+                href: productRoutes.index(),
+                icon: Barcode,
+            },
         );
     }
 
@@ -86,11 +92,11 @@ const mainNavItems = computed(() => {
                 href: userRoutes.index(),
                 icon: Users
             },
-            // {
-            //     title: 'Products',
-            //     href: productRoutes.index(),
-            //     icon: Barcode,
-            // },
+            {
+                title: 'Products',
+                href: productRoutes.index(),
+                icon: Barcode,
+            },
             // {
             //     title: 'Deliveries',
             //     href: deliveryLocationRoutes.index(),
@@ -192,7 +198,7 @@ const rightNavItems: NavItem[] = [
                     </Sheet>
                 </div>
 
-                <Link :href="dashboard()" class="flex items-center gap-x-2">
+                <Link href="/" class="flex items-center gap-x-2">
                     <AppLogo />
                 </Link>
 
