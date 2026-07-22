@@ -1,8 +1,8 @@
 @import './forms';
 @import './tables';
 
-ul,
-ol {
+ul.list,
+ol.list {
     @apply list-outside;
 
     li {
@@ -10,11 +10,11 @@ ol {
     }
 }
 
-ul {
+ul.list {
     @apply list-disc;
 }
 
-ol {
+ol.list {
     @apply list-decimal;
 }
 

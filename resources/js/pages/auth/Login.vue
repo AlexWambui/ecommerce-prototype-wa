@@ -16,7 +16,7 @@ import { request } from '@/routes/password';
 defineOptions({
     layout: {
         title: 'Log in to your account',
-        description: 'Enter your email and password below to log in',
+        // description: 'Enter your email and password below to log in',
     },
 });
 
@@ -36,7 +36,7 @@ defineProps<{
         {{ status }}
     </div>
 
-    <PasskeyVerify />
+    <!-- <PasskeyVerify /> -->
 
     <Form
         v-bind="store.form()"
@@ -83,12 +83,12 @@ defineProps<{
                 <InputError :message="errors.password" />
             </div>
 
-            <div class="flex items-center justify-between">
+            <!-- <div class="flex items-center justify-between">
                 <Label for="remember" class="flex items-center space-x-3">
                     <Checkbox id="remember" name="remember" :tabindex="3" />
                     <span>Remember me</span>
                 </Label>
-            </div>
+            </div> -->
 
             <Button
                 type="submit"
