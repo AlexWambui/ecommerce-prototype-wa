@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import AddToCartButton from '@/pages/guest/components/AddToCartButton.vue';
 import { usePriceFormatter } from '@/composables/usePriceFormatter';
 
 const {formatPrice} = usePriceFormatter();
@@ -93,15 +94,13 @@ const isHovered = ref(false);
             </div>
 
             <!-- Add to Cart Button -->
-            <button :disabled="product.stock === 0"
-                    :class="[
-                        'w-full mt-3 py-2.5 px-4 rounded-lg font-medium transition-all duration-200',
-                        product.stock > 0 
-                            ? 'bg-indigo-600 hover:bg-indigo-700 text-white hover:shadow-lg active:scale-95' 
-                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    ]">
-                {{ product.stock > 0 ? 'Add to Cart' : 'Out of Stock' }}
-            </button>
+            <AddToCartButton 
+                :product-slug="product.slug"
+                :product-name="product.name"
+                :product-price="formatPrice(product.price)"
+                variant="whatsapp"
+                button-text="Chat on WhatsApp"
+            />
         </div>
     </div>
 </template>

@@ -194,11 +194,13 @@ onUnmounted(() => {
             </div>
 
             <!-- Add to Cart Button -->
-            <AddToCartButton
-                v-if="showAddToCart"
-                :product-id="product.id"
+            <!-- Add to Cart Button -->
+            <AddToCartButton 
+                :product-slug="product.slug"
                 :product-name="product.name"
-                :stock="product.stock"
+                :product-price="formatPrice(product.price)"
+                variant="whatsapp"
+                button-text="Chat on WhatsApp"
             />
         </div>
     </div>

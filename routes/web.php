@@ -55,6 +55,7 @@ Route::middleware(['auth', 'verified', 'role:super_admin,admin'])->group(functio
         Route::post('/', 'store')->name('store');
         Route::get('/{product_category}/edit', 'edit')->name('edit');
         Route::put('/{product_category}', 'update')->name('update');
+        Route::post('/{product}/toggle-attribute', 'toggleAttribute')->name('toggle-attribute');
         Route::delete('/{product_category}', 'destroy')->name('destroy');
     });
 });
