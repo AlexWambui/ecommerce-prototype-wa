@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
 import ProductGrid from '@/pages/guest/components/ProductGrid.vue';
 
 interface ProductCategory {
@@ -26,7 +27,7 @@ const props = defineProps<Props>();
 				<div class="content lg:col-span-7 space-y-4">
 					<h1 class="title font-bold text-l-text lg:text-xl-text uppercase">Walk with confidence. <br> Step in Style.</h1>
 					<div class="actions bg-amber-400 font-semibold py-2 px-4 inline-block rounded-sm">
-						<a href="/shop">Start Shopping</a>
+						<Link href="/shop">Start Shopping</Link>
 					</div>
 				</div>
 

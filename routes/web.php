@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomePageController;
+use App\Http\Controllers\ShopPageController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 
@@ -15,6 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 require __DIR__.'/settings.php';
     
 Route::get('/', [HomePageController::class, 'index'])->name('home');
+Route::get('/shop', [ShopPageController::class, 'index'])->name('shop-page.index');
 
 Route::middleware(['auth', 'verified', 'role:super_admin,admin'])->group(function () {
     Route::prefix('users')

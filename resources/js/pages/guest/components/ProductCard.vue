@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { Link } from '@inertiajs/vue3';
 import AddToCartButton from '@/pages/guest/components/AddToCartButton.vue';
 import { usePriceFormatter } from '@/composables/usePriceFormatter';
 
@@ -181,7 +182,7 @@ onUnmounted(() => {
             </div>
             
             <h3 class="text-base font-semibold text-gray-900 hover:text-indigo-600 transition-colors line-clamp-1">
-                <a :href="`/products/${product.slug}`">{{ product.name }}</a>
+                <Link :href="`/products/${product.slug}`">{{ product.name }}</Link>
             </h3>
 
             <!-- Price -->

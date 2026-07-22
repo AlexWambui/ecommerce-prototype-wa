@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { Link } from '@inertiajs/vue3';
 import ProductCard from './ProductCard.vue';
 import ProductCardSkeleton from './ProductCardSkeleton.vue';
 
@@ -45,12 +45,12 @@ const emit = defineEmits<{
                 <h2 class="text-2xl sm:text-3xl font-bold">
                     {{ title }}
                 </h2>
-                <a v-if="showViewAll" 
+                <Link v-if="showViewAll" 
                    :href="viewAllLink || '#'" 
                    @click.prevent="emit('viewAll')"
                    class="text-indigo-600 hover:text-indigo-700 font-medium text-sm sm:text-base transition-colors">
                     View All →
-                </a>
+                </Link>
             </div>
 
             <!-- Grid -->
