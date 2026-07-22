@@ -41,6 +41,12 @@ class User extends Authenticatable implements PasskeyUser
 
     protected $guarded = [];
 
+    protected $appends = [
+        'role_label',
+        'status_label',
+        'image_url',
+    ];
+
     /**
      * Get the attributes that should be cast.
      *

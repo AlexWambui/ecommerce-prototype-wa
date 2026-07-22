@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from '@lucide/vue';
+import { BookOpen, Folder, LayoutGrid, Menu, Search, Users } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
@@ -35,8 +35,10 @@ import UserMenuContent from '@/components/UserMenuContent.vue';
 import { useCurrentUrl } from '@/composables/useCurrentUrl';
 import { getInitials } from '@/composables/useInitials';
 import { toUrl } from '@/lib/utils';
-import { dashboard } from '@/routes';
 import type { BreadcrumbItem, NavItem } from '@/types';
+import { dashboard } from '@/routes';
+
+import userRoutes from '@/routes/users';
 
 type Props = {
     breadcrumbs?: BreadcrumbItem[];
@@ -53,20 +55,64 @@ const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl();
 const activeItemStyles =
     'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-];
+const user = computed(() => page.props.auth.user);
+const isAdmin = computed(() => user.value?.role_label === 'Admin');
+const isSuperAdmin = computed(() => user.value?.role_label === 'Super Admin');
+const isCustomer = computed(() => user.value?.role_label === 'Customer');
+
+const mainNavItems = computed(() => {
+    const items = [
+        {
+            title: 'Dashboard',
+            href: dashboard(),
+            icon: LayoutGrid,
+        },
+    ];
+
+    if (isSuperAdmin.value) {
+        items.push(
+            {
+                title: 'Users',
+                href: userRoutes.index(),
+                icon: Users
+            },
+        );
+    }
+
+    if (isAdmin.value) {
+        items.push(
+            {
+                title: 'Users',
+                href: userRoutes.index(),
+                icon: Users
+            },
+            // {
+            //     title: 'Products',
+            //     href: productRoutes.index(),
+            //     icon: Barcode,
+            // },
+            // {
+            //     title: 'Deliveries',
+            //     href: deliveryLocationRoutes.index(),
+            //     icon: Truck,
+            // },
+            // {
+            //     title: 'Callbacks',
+            //     href: callbackMessageRoutes.list(),
+            //     icon: PhoneOutgoing,
+            // },
+        );
+    }
+
+    return items;
+});
 
 const rightNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
+    // {
+    //     title: 'Repository',
+    //     href: 'https://github.com/laravel/vue-starter-kit',
+    //     icon: Folder,
+    // },
     {
         title: 'Documentation',
         href: 'https://laravel.com/docs/starter-kits#vue',
@@ -78,7 +124,7 @@ const rightNavItems: NavItem[] = [
 <template>
     <div>
         <div class="border-b border-sidebar-border/80">
-            <div class="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
+            <div class="mx-auto flex h-16 items-center px-4 lg:px-16">
                 <!-- Mobile Menu -->
                 <div class="lg:hidden">
                     <Sheet>
@@ -91,7 +137,7 @@ const rightNavItems: NavItem[] = [
                                 <Menu class="h-5 w-5" />
                             </Button>
                         </SheetTrigger>
-                        <SheetContent side="left" class="w-[300px] p-6">
+                        <SheetContent side="left" class="w-75 p-6">
                             <SheetTitle class="sr-only"
                                 >Navigation menu</SheetTitle
                             >
