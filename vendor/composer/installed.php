@@ -805,15 +805,6 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
-        'pestphp/pest-plugin-drift' => array(
-            'pretty_version' => 'v4.1.0',
-            'version' => '4.1.0.0',
-            'reference' => '86fdf47879469906edecd5ca754fc80268f084a5',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../pestphp/pest-plugin-drift',
-            'aliases' => array(),
-            'dev_requirement' => true,
-        ),
         'pestphp/pest-plugin-laravel' => array(
             'pretty_version' => 'v4.1.0',
             'version' => '4.1.0.0',
