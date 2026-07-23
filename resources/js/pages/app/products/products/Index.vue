@@ -67,7 +67,7 @@ const toggleAttribute = async (product: Product, attribute: 'is_featured' | 'is_
     toggling.value = { id: product.id, attribute };
     
     try {
-        const response = await fetch(productRoutes.toggleAttribute(product.id).url, {
+        const response = await fetch(productRoutes.toggleAttribute(product.uuid).url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -221,12 +221,12 @@ const getTagLabel = (type: string, product: Product) => {
                     </TableCell>
                     <TableCell class="actions w-20">
                         <div class="actions-wrapper">
-                            <Link :href="productRoutes.edit(product.id).url" class="action edit">
+                            <Link :href="productRoutes.edit(product.uuid).url" class="action edit">
                                 <Pencil />
                             </Link>
                             <span class="divider">|</span>
                             <DeleteConfirmationDialog 
-                                :url="productRoutes.destroy(product.id).url" 
+                                :url="productRoutes.destroy(product.uuid).url" 
                                 title="Delete Product?" 
                                 description="This product will be deleted permanently!" 
                                 confirm-text="Delete Product"
