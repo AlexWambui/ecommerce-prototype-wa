@@ -40,9 +40,9 @@ Route::middleware(['auth', 'verified', 'role:super_admin,admin'])->group(functio
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/', 'store')->name('store');
-        Route::get('/{product_category}/edit', 'edit')->name('edit');
-        Route::put('/{product_category}', 'update')->name('update');
-        Route::delete('/{product_category}', 'destroy')->name('destroy');
+        Route::get('/{product_category:uuid}/edit', 'edit')->name('edit');
+        Route::put('/{product_category:uuid}', 'update')->name('update');
+        Route::delete('/{product_category:uuid}', 'destroy')->name('destroy');
     });
 
     Route::prefix('products')

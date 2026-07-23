@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Exception;
 use App\Models\ProductCategory;
@@ -22,7 +24,10 @@ class ProductCategoryController extends Controller
                 ->orWhere('slug', 'like', "%{$search}%");
         }
 
-        $categories = $query->orderBy('name')->get();
+        $categories = $query
+            ->orderBy('name')
+            ->withCount('products')
+            ->get();
 
         return inertia('app/products/categories/Index', [
             'categories' => $categories,
@@ -39,12 +44,19 @@ class ProductCategoryController extends Controller
 
     public function store(ProductCategoryRequest $request)
     {
+        $validated_data = $request->validated();
+
+        $image = $validated_data['image'] ?? null;
+        unset($validated_data['image']);
+
         try {
             DB::beginTransaction();
 
-            ProductCategory::create([
-                'name' => $request->name,
-            ]);
+            $product_category = ProductCategory::create($validated_data);
+
+            if ($image && $image instanceof \Illuminate\Http\UploadedFile) {
+                $this->uploadImage($image, $product_category);
+            }
 
             DB::commit();
 
@@ -75,18 +87,34 @@ class ProductCategoryController extends Controller
 
     public function update(ProductCategory $product_category, ProductCategoryRequest $request)
     {
+        $validated_data = $request->validated();
+
+        $image = $validated_data['image'] ?? null;
+        unset($validated_data['image']);
+
         try {
             DB::beginTransaction();
 
-            $product_category->update([
-                'name' => $request->name,
-            ]);
+            $product_category->update($validated_data);
+
+            if ($request->hasFile('image')) {
+                // Delete old logo if exists
+                if ($product_category->image) {
+                    $oldPath = "product-categories/{$product_category->image}";
+                    if (Storage::disk('public')->exists($oldPath)) {
+                        Storage::disk('public')->delete($oldPath);
+                    }
+                }
+
+                $image_path = $this->uploadImage($request->file('image'), $product_category);
+                $product_category->update(['image' => $image_path]);
+            }
 
             DB::commit();
 
             Inertia::flash('toast', [
                 'type' => "success",
-                'message' => "Category: {$request->name} updated successfully"
+                'message' => "Category updated successfully"
             ]);
 
             return to_route('product-categories.index');
@@ -105,6 +133,10 @@ class ProductCategoryController extends Controller
     public function destroy(ProductCategory $product_category)
     {
         try {
+            if ($product_category->image) {
+                Storage::disk('public')->delete('product-categories/' . $product_category->image);
+            }
+
             $product_category->delete();
 
             Inertia::flash('toast', [
@@ -121,5 +153,19 @@ class ProductCategoryController extends Controller
 
             return back()->withInput();
         }
+    }
+
+    private function uploadImage($file, ProductCategory $product_category): string
+    {
+        $slug = Str::slug($product_category->name);
+        $timestamp = now()->format('Ymd');
+        $random = 'albachuza_'.Str::random(6);
+        $extension = $file->getClientOriginalExtension();
+
+        $filename = "{$slug}_{$timestamp}_{$random}.{$extension}";
+
+        $file->storeAs('product-categories', $filename, 'public');
+
+        return $filename;
     }
 }

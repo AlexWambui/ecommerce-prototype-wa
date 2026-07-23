@@ -12,8 +12,11 @@ import productCategoryRoutes from '@/routes/product-categories';
 
 interface ProductCategory {
     id: number;
+    uuid: string;
     name: string;
     slug: string;
+    thumbnail_url: string;
+    products_count: number;
 };
 
 interface Props {
@@ -63,8 +66,9 @@ watch([search], () => {
             <TableHeader>
                 <TableRow>
                     <TableHead class="id">#</TableHead>
+                    <TableHead>Image</TableHead>
                     <TableHead>Name</TableHead>
-                    <TableHead>Slug</TableHead>
+                    <TableHead>Products</TableHead>
                     <TableHead class="actions">Actions</TableHead>
                 </TableRow>
             </TableHeader>
@@ -72,15 +76,16 @@ watch([search], () => {
             <TableBody>
                 <TableRow v-for="(category, index) in props.categories" :key="category.id">
                     <TableCell class="id">{{ index + 1 }}</TableCell>
+                    <TableCell class="w-20"><img :src="category.thumbnail_url" :alt="category.slug"></TableCell>
                     <TableCell>{{ category.name }}</TableCell>
-                    <TableCell>{{ category.slug }}</TableCell>
+                    <TableCell>{{ category.products_count }}</TableCell>
                     <TableCell class="actions">
                         <div class="actions-wrapper">
-                            <Link :href="productCategoryRoutes.edit(category.id).url" class="action edit">
+                            <Link :href="productCategoryRoutes.edit(category.uuid).url" class="action edit">
                                 <Pencil />
                             </Link>
                             <span class="divider">|</span>
-                            <DeleteConfirmationDialog :url="productCategoryRoutes.destroy(category.id).url" title="Delete Category?" description="This category will be deleted permanently!" confirm-text="Delete Category">
+                            <DeleteConfirmationDialog :url="productCategoryRoutes.destroy(category.uuid).url" title="Delete Category?" description="This category will be deleted permanently!" confirm-text="Delete Category">
                                 <template #trigger>
                                     <button class="action delete">
                                         <Trash2 />

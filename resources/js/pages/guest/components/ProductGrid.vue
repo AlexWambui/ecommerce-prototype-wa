@@ -42,7 +42,7 @@ const emit = defineEmits<{
         <div class="container-fluid mx-auto px-4 lg:px-16">
             <!-- Header -->
             <div v-if="title" class="flex justify-between items-center mb-8">
-                <h2 class="text-2xl sm:text-3xl font-bold">
+                <h2 class="text-2xl sm:text-3xl font-bold uppercase">
                     {{ title }}
                 </h2>
                 <Link v-if="showViewAll" 
