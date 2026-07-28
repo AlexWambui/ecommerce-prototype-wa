@@ -23,6 +23,7 @@ class ProductHomePageResource extends JsonResource
             'stock' => 30,
             'sku' => $this->sku,
             'category_name' => $this->category_name,
+            'brand_nane' => $this->brand_name,
             'is_new' => (bool) $this->is_new,
             'is_featured' => (bool) $this->is_featured,
             'is_active' => (bool) $this->is_active,

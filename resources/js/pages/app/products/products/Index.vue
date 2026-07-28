@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue';
-import { useDebounceFn } from '@vueuse/core';
 import { Link, router } from '@inertiajs/vue3';
 import { Pencil, Trash2, Loader2 } from '@lucide/vue';
-import Input from '@/components/ui/input/Input.vue';
-import Button from '@/components/ui/button/Button.vue';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useDebounceFn } from '@vueuse/core';
+import { ref, watch, computed } from 'vue';
 import DeleteConfirmationDialog from '@/components/custom/DeleteConfirmation.vue';
 import Pagination from '@/components/custom/Pagination.vue';
-import ProductsNav from '../components/ProductsNav.vue';
-import type { Product } from '@/types/product';
-import productRoutes from '@/routes/products';
+import Button from '@/components/ui/button/Button.vue';
+import Input from '@/components/ui/input/Input.vue';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { usePriceFormatter } from '@/composables/usePriceFormatter';
+import productRoutes from '@/routes/products';
+import type { Product } from '@/types/product';
+import ProductsNav from '../components/ProductsNav.vue';
 
 const { formatPrice } = usePriceFormatter();
 
@@ -55,6 +55,7 @@ const getDisplayRange = computed(() => {
     const { current_page, per_page, total } = props.products.meta;
     const start = (current_page - 1) * per_page + 1;
     const end = Math.min(current_page * per_page, total);
+
     return { start, end, total };
 });
 
@@ -121,6 +122,7 @@ const isLoading = (product: Product, attribute: string) => {
 
 const getTagLabel = (type: string, product: Product) => {
     const attribute = type as 'is_featured' | 'is_new' | 'is_active';
+
     if (isLoading(product, attribute)) {
         return ''; // Return empty string, we'll show the spinner
     }
@@ -169,9 +171,10 @@ const getTagLabel = (type: string, product: Product) => {
                     <TableHead>Image</TableHead>
                     <TableHead>Product</TableHead>
                     <TableHead>SKU</TableHead>
+                    <TableHead>Cost (Ksh)</TableHead>
                     <TableHead>Price (Ksh)</TableHead>
-                    <TableHead>Stock</TableHead>
                     <TableHead>Category</TableHead>
+                    <TableHead>Brand</TableHead>
                     <TableHead class="tags">Tags</TableHead>
                     <TableHead class="actions">Actions</TableHead>
                 </TableRow>
@@ -181,11 +184,12 @@ const getTagLabel = (type: string, product: Product) => {
                 <TableRow v-for="(product, index) in products.data" :key="product.id">
                     <TableCell class="id">{{ (products.meta.current_page - 1) * products.meta.per_page + index + 1 }}</TableCell>
                     <TableCell class="w-20"><img :src="product.thumbnail_url" :alt="product.slug"></TableCell>
-                    <TableCell class="max-w-30 overflow-hidden text-ellipsis cursor-help" :title="product.name">{{ product.name }}</TableCell>
+                    <TableCell :class="!product.is_active ? 'text-red-600 font-bold' : ''" class="max-w-30 overflow-hidden text-ellipsis cursor-help" :title="product.name">{{ product.name }}</TableCell>
                     <TableCell>{{ product.sku ?? '-' }}</TableCell>
+                    <TableCell>{{ formatPrice(product.cost_price) }}</TableCell>
                     <TableCell>{{ formatPrice(product.price) }}</TableCell>
-                    <TableCell>{{ product.stock ?? 0 }}</TableCell>
                     <TableCell>{{ product.category_name }}</TableCell>
+                    <TableCell>{{ product.brand_name }}</TableCell>
                     <TableCell class="tags min-w-50 w-45">
                         <div class="tags-wrapper flex flex-wrap gap-4">
                             <!-- Featured -->
@@ -195,7 +199,7 @@ const getTagLabel = (type: string, product: Product) => {
                                 :class="getTagClasses('is_featured', product.is_featured)"
                             >
                                 <Loader2 v-if="isLoading(product, 'is_featured')" class="w-3 h-3 animate-spin" />
-                                <span v-else>Featured</span>
+                                <span v-else>{{getTagLabel('is_featured', product)}}</span>
                             </button>
 
                             <!-- New -->
@@ -205,7 +209,7 @@ const getTagLabel = (type: string, product: Product) => {
                                 :class="getTagClasses('is_new', product.is_new)"
                             >
                                 <Loader2 v-if="isLoading(product, 'is_new')" class="w-3 h-3 animate-spin" />
-                                <span v-else>New</span>
+                                <span v-else>{{getTagLabel('is_new', product)}}</span>
                             </button>
 
                             <!-- Active -->
@@ -215,7 +219,7 @@ const getTagLabel = (type: string, product: Product) => {
                                 :class="getTagClasses('is_active', product.is_active)"
                             >
                                 <Loader2 v-if="isLoading(product, 'is_active')" class="w-3 h-3 animate-spin" />
-                                <span v-else>Active</span>
+                                <span v-else>{{getTagLabel('is_active', product)}}</span>
                             </button>
                         </div>
                     </TableCell>

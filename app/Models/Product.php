@@ -99,6 +99,11 @@ class Product extends Model
         return $this->belongsTo(Brand::class, 'brand_id');
     }
 
+    public function getBrandNameAttribute(): string
+    {
+        return $this->brand?->name ?? 'No Brand';
+    }
+
     public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class, 'product_id')->orderBy('sort_order');

@@ -9,7 +9,9 @@ export interface Product {
     name: string;
     slug: string;
     category_name: string;
+    brand_name: string;
     description: string;
+    cost_price: number;
     price: number;
     compare_price: number | null;
     stock: number;
