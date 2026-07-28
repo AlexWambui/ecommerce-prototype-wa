@@ -94,6 +94,11 @@ class Product extends Model
         return $this->category?->name ?? 'Uncategorized';
     }
 
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
+    }
+
     public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class, 'product_id')->orderBy('sort_order');

@@ -14,7 +14,7 @@ const user = computed(() => page.props.auth?.user);
     <header class="guest_navbar py-4 px-4 lg:px-16 border-b border-border sticky top-0 z-50 bg-background/95 backdrop-blur-sm transition-all duration-300">
         <nav class="flex items-center justify-between">
             <div class="branding">
-                <Link href="/">Albachuza</Link>
+                <Link href="/" class="font-bold">Albachuza</Link>
             </div>
 
             <div class="links flex items-center gap-8">

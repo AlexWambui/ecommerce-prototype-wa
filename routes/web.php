@@ -6,6 +6,7 @@ use App\Http\Controllers\ShopPageController;
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 
@@ -32,6 +33,19 @@ Route::middleware(['auth', 'verified', 'role:super_admin,admin'])->group(functio
         Route::get('/{user}/edit', 'edit')->name('edit');
         Route::put('/{user}', 'update')->name('update');
         Route::delete('/{user}', 'destroy')->name('destroy');
+    });
+
+    Route::prefix('brands')
+        ->name('brands.')
+        ->controller(BrandController::class)
+        ->group( function()
+    {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{brand:uuid}/edit', 'edit')->name('edit');
+        Route::put('/{brand:uuid}', 'update')->name('update');
+        Route::delete('/{brand:uuid}', 'destroy')->name('destroy');
     });
 
     Route::prefix('product-categories')

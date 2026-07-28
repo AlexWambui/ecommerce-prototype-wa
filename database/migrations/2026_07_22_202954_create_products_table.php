@@ -30,6 +30,7 @@ return new class extends Migration
             $table->unsignedInteger('low_stock_threshold')->default(5);
 
             $table->foreignId('product_category_id')->nullable()->constrained('product_categories')->nullOnDelete();
+            $table->foreignId('brand_id')->nullable()->constrained('brands')->nullOnDelete();
             $table->timestamps();
         });
     }
