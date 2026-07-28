@@ -3,7 +3,8 @@
 Customers
 ❌ can search for a product from the shop page
 ❌ can view product details page
-❌ can filter products according to selected category
+❌ can filter products according to selected category on the shop page
+❌ can filter products according to selected brand on the shop page or home page
 ❌ can login and view their dashboard to track their purchases
 
 Sellers
