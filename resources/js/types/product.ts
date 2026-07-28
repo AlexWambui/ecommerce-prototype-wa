@@ -10,6 +10,8 @@ export interface Product {
     slug: string;
     category_name: string;
     brand_name: string;
+    size: string;
+    color: string;
     description: string;
     cost_price: number;
     price: number;

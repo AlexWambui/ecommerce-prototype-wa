@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\ShopPageController;
+use App\Http\Controllers\GuestProductController;
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
@@ -20,6 +21,7 @@ require __DIR__.'/settings.php';
     
 Route::get('/', [HomePageController::class, 'index'])->name('home');
 Route::get('/shop', [ShopPageController::class, 'index'])->name('shop-page.index');
+Route::get('/product-details/{product:slug}', [GuestProductController::class, 'index'])->name('product-details.index');
 
 Route::middleware(['auth', 'verified', 'role:super_admin,admin'])->group(function () {
     Route::prefix('users')

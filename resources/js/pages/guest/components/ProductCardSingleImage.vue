@@ -3,6 +3,7 @@ import { Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { usePriceFormatter } from '@/composables/usePriceFormatter';
 import AddToCartButton from '@/pages/guest/components/AddToCartButton.vue';
+import productDetailsRoute from '@/routes/product-details';
 
 const {formatPrice} = usePriceFormatter();
 
@@ -77,7 +78,7 @@ const isHovered = ref(false);
             </div>
             
             <h3 class="text-base font-semibold text-gray-900 hover:text-indigo-600 transition-colors line-clamp-1">
-                <Link :href="`/products/${product.slug}`">{{ product.name }}</Link>
+                <Link :href="productDetailsRoute.index(product.slug)">{{ product.name }}</Link>
             </h3>
 
             <!-- Price -->
