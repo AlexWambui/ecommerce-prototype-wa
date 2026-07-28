@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import AddToCartButton from '@/pages/guest/components/AddToCartButton.vue';
+import { ref } from 'vue';
 import { usePriceFormatter } from '@/composables/usePriceFormatter';
+import AddToCartButton from '@/pages/guest/components/AddToCartButton.vue';
 
 const {formatPrice} = usePriceFormatter();
-
-interface ProductImage {
-    url: string;
-    alt: string;
-}
 
 interface Product {
     id: number;
@@ -25,7 +20,7 @@ interface Product {
     thumbnail_url: string;
 }
 
-const props = defineProps<{
+defineProps<{
     product: Product;
 }>();
 
@@ -51,21 +46,21 @@ const isHovered = ref(false);
             <div class="absolute top-2 left-2 flex flex-col gap-1">
                 <span v-if="product.is_new" 
                       class="bg-green-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg">
-                    NEW
+                    New Arrival
                 </span>
             </div>
 
             <!-- Wishlist Button -->
-            <button class="absolute top-2 right-2 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-md hover:bg-white transition-colors duration-200">
+            <!-- <button class="absolute top-2 right-2 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-md hover:bg-white transition-colors duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 hover:text-red-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
-            </button>
+            </button> -->
         </div>
 
         <!-- Product Info -->
-        <div class="p-4">
-            <div class="mb-1 flex justify-between items-center">
+        <div class="p-4 space-y-4">
+            <div class="flex justify-between items-center">
                 <span class="text-xs text-gray-500 normal-case tracking-wider">{{ product.category_name }}</span>
 
                 <!-- TODO: add the actual stock count -->
@@ -76,7 +71,7 @@ const isHovered = ref(false);
                         product.stock > 0 ? 'bg-yellow-500' : 'bg-red-500'
                     ]"></span>
                     <span class="text-xs text-gray-500">
-                        {{ product.stock > 0 ? `In stock: ${product.stock}` : 'Out of stock' }}
+                        {{ product.stock > 0 ? 'In stock' : 'Out of stock' }}
                     </span>
                 </div>
             </div>

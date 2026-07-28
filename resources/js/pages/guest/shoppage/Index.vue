@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue';
-import { useDebounceFn } from '@vueuse/core';
 import { Link, router } from '@inertiajs/vue3';
-import Input from '@/components/ui/input/Input.vue';
-import ProductCard from '../components/ProductCardSingleImage.vue';
+import { useDebounceFn } from '@vueuse/core';
+import { ref, watch, computed } from 'vue';
 import Pagination from '@/components/custom/Pagination.vue';
-import type { Product } from '@/types/product';
+import Input from '@/components/ui/input/Input.vue';
 import shopPageRoutes from '@/routes/shop-page';
+import type { Product } from '@/types/product';
+import ProductCard from '../components/ProductCardSingleImage.vue';
 
 interface Category {
     id: number;
@@ -53,12 +53,13 @@ const getDisplayRange = computed(() => {
     const { current_page, per_page, total } = props.products.meta;
     const start = (current_page - 1) * per_page + 1;
     const end = Math.min(current_page * per_page, total);
+
     return { start, end, total };
 });
 </script>
 
 <template>
-    <div class="search lg:w-[30dvw] lg:mx-auto py-4">
+    <div class="search lg:w-[30dvw] lg:mx-auto py-2">
         <Input
             v-model="search"
             type="text"
