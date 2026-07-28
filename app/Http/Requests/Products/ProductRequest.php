@@ -43,6 +43,7 @@ class ProductRequest extends FormRequest
             'is_active' => ['boolean'],
             'is_new' => ['boolean'],
             'product_category_id' => ['nullable', 'exists:product_categories,id'],
+            'brand_id' => ['nullable', 'exists:brands,id'],
             'images' => ['nullable', 'array', 'max:5'],
             'images.*' => ['image', 'mimes:jpg,jpeg,png,gif,svg,webp', 'max:2048'],
         ];

@@ -11,6 +11,7 @@ use Inertia\Inertia;
 use Exception;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\Brand;
 use App\Http\Resources\Products\ProductIndexPageResource;
 use App\Http\Requests\Products\ProductRequest;
 
@@ -46,9 +47,11 @@ class ProductController extends Controller
     public function create()
     {
         $product_categories = ProductCategory::select('id', 'name')->orderBy('name')->get();
+        $brands = Brand::select('id', 'name')->orderBy('name')->get();
 
         return inertia('app/products/products/Create', [
-            'product_categories' => $product_categories
+            'product_categories' => $product_categories,
+            'brands' => $brands
         ]);
     }
 

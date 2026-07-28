@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Link, Head, useForm, router } from '@inertiajs/vue3';
+import { Link, Head, useForm } from '@inertiajs/vue3';
 import { ImagePlus, X } from '@lucide/vue';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import InputError from '@/components/InputError.vue';
-import { Spinner } from '@/components/ui/spinner';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ref } from 'vue';
 import FormHeader from '@/components/custom/FormHeader.vue';
+import InputError from '@/components/InputError.vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Spinner } from '@/components/ui/spinner';
+import { Textarea } from '@/components/ui/textarea';
 import productRoutes from '@/routes/products';
 
 interface Category {
@@ -17,8 +17,14 @@ interface Category {
     name: string;
 }
 
-const props = defineProps<{
+interface Brand {
+    id: number;
+    name: string;
+}
+
+defineProps<{
     product_categories: Category[];
+    brands: Brand[];
 }>();
 
 const form = useForm({
@@ -31,6 +37,7 @@ const form = useForm({
     is_active: true,
     is_new: false,
     product_category_id: null as number | null,
+    brand_id: null as number | null,
     images: [] as File[],
 });
 
@@ -46,12 +53,15 @@ const handleImageChange = (e: Event) => {
     const target = e.target as HTMLInputElement;
     const files = Array.from(target.files || []);
 
-    if (!files.length) return;
+    if (!files.length) { 
+        return
+    }
 
     // Max count
     if (form.images.length + files.length > MAX_IMAGES) {
         alert(`Maximum ${MAX_IMAGES} images allowed.`);
         target.value = '';
+
         return;
     }
 
@@ -60,6 +70,7 @@ const handleImageChange = (e: Event) => {
         if (file.size > MAX_FILE_SIZE) {
             alert(`${file.name} exceeds 2MB`);
             target.value = '';
+
             return;
         }
     }
@@ -71,12 +82,15 @@ const handleImageChange = (e: Event) => {
     if (currentSize + newSize > MAX_TOTAL_SIZE) {
         alert(`Total size cannot exceed 10MB`);
         target.value = '';
+
         return;
     }
 
     // Add files + previews
     files.forEach(file => {
-        if (!file.type.startsWith('image/')) return;
+        if (!file.type.startsWith('image/')) {
+            return
+        }
 
         form.images.push(file);
         imagePreviews.value.push(URL.createObjectURL(file));
@@ -122,6 +136,20 @@ const submitForm = () => {
                         <InputError :message="form.errors.name" />
                     </div>
 
+                </div>
+                
+                <div class="inputs-group-wrapper-3">
+                    <div class="inputs-group">
+                        <Label for="sku">SKU</Label>
+                        <Input
+                            id="sku"
+                            v-model="form.sku"
+                            type="text"
+                            placeholder="SKU"
+                        />
+                        <InputError :message="form.errors.sku" />
+                    </div>
+
                     <div class="inputs-group">
                         <Label for="product_category_id">Product Category</Label>
                         <Select v-model="form.product_category_id">
@@ -143,18 +171,27 @@ const submitForm = () => {
                         </Select>
                         <InputError :message="form.errors.product_category_id" />
                     </div>
-                </div>
 
-                <div class="inputs-group-wrapper">
                     <div class="inputs-group">
-                        <Label for="sku">SKU</Label>
-                        <Input
-                            id="sku"
-                            v-model="form.sku"
-                            type="text"
-                            placeholder="SKU"
-                        />
-                        <InputError :message="form.errors.sku" />
+                        <Label for="product_category_id">Brand</Label>
+                        <Select v-model="form.brand_id">
+                            <SelectTrigger class="w-full">
+                                <SelectValue placeholder="Select brand" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem :value="null">None</SelectItem>
+                                    <SelectItem 
+                                        v-for="option in brands" 
+                                        :key="option.id"
+                                        :value="option.id"
+                                    >
+                                        {{ option.name }}
+                                    </SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                        <InputError :message="form.errors.brand_id" />
                     </div>
                 </div>
 
