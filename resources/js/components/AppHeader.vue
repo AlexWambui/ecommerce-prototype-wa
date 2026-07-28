@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Menu, Search, Users, Barcode } from '@lucide/vue';
+import { BookOpen, LayoutGrid, Menu, Search, Users, Barcode, Truck } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
@@ -35,11 +35,12 @@ import UserMenuContent from '@/components/UserMenuContent.vue';
 import { useCurrentUrl } from '@/composables/useCurrentUrl';
 import { getInitials } from '@/composables/useInitials';
 import { toUrl } from '@/lib/utils';
-import type { BreadcrumbItem, NavItem } from '@/types';
 import { dashboard } from '@/routes';
-
-import userRoutes from '@/routes/users';
+import deliveryLocationRoutes from '@/routes/delivery-locations';
 import productRoutes from '@/routes/products';
+import userRoutes from '@/routes/users';
+import type { BreadcrumbItem, NavItem } from '@/types';
+
 
 type Props = {
     breadcrumbs?: BreadcrumbItem[];
@@ -59,7 +60,7 @@ const activeItemStyles =
 const user = computed(() => page.props.auth.user);
 const isAdmin = computed(() => user.value?.role_label === 'Admin');
 const isSuperAdmin = computed(() => user.value?.role_label === 'Super Admin');
-const isCustomer = computed(() => user.value?.role_label === 'Customer');
+// const isCustomer = computed(() => user.value?.role_label === 'Customer');
 
 const mainNavItems = computed(() => {
     const items = [
@@ -82,6 +83,11 @@ const mainNavItems = computed(() => {
                 href: productRoutes.index(),
                 icon: Barcode,
             },
+            {
+                title: 'Deliveries',
+                href: deliveryLocationRoutes.index(),
+                icon: Truck
+            }
         );
     }
 
@@ -97,11 +103,11 @@ const mainNavItems = computed(() => {
                 href: productRoutes.index(),
                 icon: Barcode,
             },
-            // {
-            //     title: 'Deliveries',
-            //     href: deliveryLocationRoutes.index(),
-            //     icon: Truck,
-            // },
+            {
+                title: 'Deliveries',
+                href: deliveryLocationRoutes.index(),
+                icon: Truck,
+            },
             // {
             //     title: 'Callbacks',
             //     href: callbackMessageRoutes.list(),
