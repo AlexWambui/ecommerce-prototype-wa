@@ -1,20 +1,18 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 
-import brandRoutes from '@/routes/brands';
-import productCategoryRoutes from '@/routes/product-categories';
-import productRoutes from '@/routes/products';
+import loyaltyMemberRoutes from '@/routes/loyalty-members';
+import userRoutes from '@/routes/users';
 
 interface Props {
-    currentPage: 'products' | 'discounts' | 'inventory' | 'product-categories' | 'brands';
+    currentPage: 'users' | 'loyalty-members';
 }
 
 defineProps<Props>();
 
 const links = [
-    { name: 'Products', href: productRoutes.index().url, key: 'products' },
-    { name: 'Categories', href: productCategoryRoutes.index(), key: 'product-categories' },
-    { name: 'Brands', href: brandRoutes.index(), key: 'brands' },
+    { name: 'Users', href: userRoutes.index().url, key: 'users' },
+    { name: 'Loyalty Members', href: loyaltyMemberRoutes.index(), key: 'loyalty-members' },
 ];
 </script>
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\GuestProductController;
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LoyaltyMemberController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
@@ -37,6 +38,32 @@ Route::middleware(['auth', 'verified', 'role:super_admin,admin'])->group(functio
         Route::get('/{user}/edit', 'edit')->name('edit');
         Route::put('/{user}', 'update')->name('update');
         Route::delete('/{user}', 'destroy')->name('destroy');
+    });
+
+    // Route::prefix('sales')
+    //     ->name('sales.')
+    //     ->controller(SaleController::class)
+    //     ->group(function()
+    // {
+    //     Route::get('/', 'index')->name('index');
+    //     Route::get('/create', 'create')->name('create');
+    //     Route::post('/', 'store')->name('store');
+    //     Route::get('/{sale:uuid}/edit', 'edit')->name('edit');
+    //     Route::put('/{sale:uuid}', 'update')->name('update');
+    //     Route::delete('/{sale:uuid}', 'destroy')->name('destroy');
+    // });
+
+    Route::prefix('loyalty-members')
+        ->name('loyalty-members.')
+        ->controller(LoyaltyMemberController::class)
+        ->group(function()
+    {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{loyalty_member:uuid}/edit', 'edit')->name('edit');
+        Route::put('/{loyalty_member:uuid}', 'update')->name('update');
+        Route::delete('/{loyalty_member:uuid}', 'destroy')->name('destroy');
     });
 
     Route::prefix('brands')

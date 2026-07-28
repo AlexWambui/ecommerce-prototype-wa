@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import InputError from '@/components/InputError.vue';
-import { Spinner } from '@/components/ui/spinner';
-import { Button } from '@/components/ui/button';
-import deliveryLocationRoutes from '@/routes/delivery-locations';
 import FormHeader from '@/components/custom/FormHeader.vue';
+import InputError from '@/components/InputError.vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Spinner } from '@/components/ui/spinner';
+import deliveryLocationRoutes from '@/routes/delivery-locations';
 
 interface DeliveryLocation {
     id: number;

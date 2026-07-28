@@ -114,6 +114,11 @@ class Product extends Model
         return $this->images->first()?->image_url ?? asset('assets/images/default.png');
     }
 
+    public function sales(): HasMany
+    {
+        return $this->hasMany(Sale::class, 'product_id');
+    }
+
     public function scopeSearch(Builder $query, $search): Builder
     {
         if (!$search) {
