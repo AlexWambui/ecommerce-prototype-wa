@@ -33,10 +33,10 @@ const isHovered = ref(false);
 </script>
 
 <template>
-    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 group">
+    <div class="bg-white shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 group">
         
         <!-- Image Carousel -->
-        <div class="relative overflow-hidden bg-gray-100 aspect-square">
+        <div class="relative overflow-hidden bg-gray-100 aspect-square h-70 w-full">
             <img 
                 :src="product.thumbnail_url" 
                 :alt="product.slug"

@@ -64,7 +64,7 @@ const variantClasses = {
     <button
         @click="openWhatsApp"
         :class="[
-            'rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2 w-full',
+            'font-medium transition-all duration-200 flex items-center justify-center gap-2 w-full',
             'hover:scale-[1.02] active:scale-95',
             sizeClasses[size],
             variantClasses[variant]

@@ -95,12 +95,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 group"
+    <div class="bg-white shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 group"
          @mouseenter="stopAutoSlide"
          @mouseleave="startAutoSlide">
         
         <!-- Image Carousel -->
-        <div class="relative overflow-hidden bg-gray-100 aspect-square">
+        <div class="relative overflow-hidden bg-gray-100 aspect-square h-70 w-full">
             <img 
                 :src="currentImage?.url || '/assets/images/placeholder-product.jpg'" 
                 :alt="currentImage?.alt || product.name"
@@ -164,7 +164,7 @@ onUnmounted(() => {
         </div>
 
         <!-- Product Info -->
-        <div class="p-4 space-y-2">
+        <div class="p-4 space-y-4">
             <div class="flex justify-between items-center">
                 <span class="text-xs text-gray-500 normal-case tracking-wider">{{ product.category_name }}</span>
 
@@ -188,7 +188,7 @@ onUnmounted(() => {
             <!-- Price -->
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                    <span class="text-xl font-bold text-gray-900">{{ formatPrice(product.price) }}</span>
+                    <span class="text-gray-900">Ksh {{ formatPrice(product.price) }}</span>
                     <!-- TODO: add discounted price if available -->
                 </div>
             </div>
