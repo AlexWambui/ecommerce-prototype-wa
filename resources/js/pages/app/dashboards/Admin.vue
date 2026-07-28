@@ -11,6 +11,7 @@ interface Props {
         total_users: number;
         total_products: number;
         total_product_categories: number;
+        total_brands: number;
         total_delivery_locations: number;
         total_delivery_areas: number;
         total_callbacks: number;
@@ -47,7 +48,7 @@ const props = defineProps<Props>();
                     <p class="text-[24px] font-bold">{{ stats.total_products }}</p>
                     <p>Products</p>
                     <div class="extras">
-                        <span class="text-sm text-muted-foreground">{{ stats.total_product_categories }} Categories</span>
+                        <span class="text-sm text-muted-foreground">{{ stats.total_product_categories }} Categories & {{ stats.total_brands }} Brands</span>
                     </div>
                 </div>
 

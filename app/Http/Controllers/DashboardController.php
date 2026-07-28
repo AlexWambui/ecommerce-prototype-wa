@@ -8,6 +8,7 @@ use App\Enums\UserRoles;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\User;
+use App\Models\Brand;
 
 class DashboardController extends Controller
 {
@@ -31,6 +32,7 @@ class DashboardController extends Controller
                     'total_users' => User::count(),
                     'total_products' => Product::count(),
                     'total_product_categories' => ProductCategory::count(),
+                    'total_brands' => Brand::count(),
                     'total_delivery_locations' => 00,
                     'total_delivery_areas' => 00,
                     'total_callbacks' => 00,
