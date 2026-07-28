@@ -33,6 +33,8 @@ const form = useForm({
     cost_price: '',
     price: '',
     sku: '',
+    size: '',
+    color: '',
     is_featured: false,
     is_active: true,
     is_new: false,
@@ -123,7 +125,7 @@ const submitForm = () => {
             <div class="form-section">
                 <h3 class="section-title">Basic Information</h3>
 
-                <div class="inputs-group-wrapper">
+                <div class="inputs-group-wrapper-3">
                     <div class="inputs-group">
                         <Label for="name" class="required">Product Name</Label>
                         <Input
@@ -136,6 +138,27 @@ const submitForm = () => {
                         <InputError :message="form.errors.name" />
                     </div>
 
+                    <div class="inputs-group">
+                        <Label for="size">Size</Label>
+                        <Input
+                            id="size"
+                            v-model="form.size"
+                            type="text"
+                            placeholder="e.g., 42 U.K"
+                        />
+                        <InputError :message="form.errors.size" />
+                    </div>
+
+                    <div class="inputs-group">
+                        <Label for="color">Color</Label>
+                        <Input
+                            id="color"
+                            v-model="form.color"
+                            type="text"
+                            placeholder="e.g., Black"
+                        />
+                        <InputError :message="form.errors.color" />
+                    </div>
                 </div>
                 
                 <div class="inputs-group-wrapper-3">

@@ -37,7 +37,7 @@ defineProps<Props>();
 			</div>
 		</section>
 
-		<section class="Categories mb-15">
+		<section class="Brands mb-15" v-if="brands.data.length > 2">
 			<div class="container-fluid">
 				<div class="brands-wrapper flex flex-wrap gap-16 justify-center">
 					<div class="brand flex flex-col justify-center items-center gap-2" v-for="brand in brands.data" v-bind:key="brand.id">
