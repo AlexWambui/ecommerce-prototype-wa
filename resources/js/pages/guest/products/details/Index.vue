@@ -26,7 +26,7 @@ const selectImage = (index: number) => {
 </script>
 
 <template>
-    <div class="product-details-page">
+    <div class="product-details-page space-y-15 pb-15">
         <div class="product-details-wrapper grid lg:grid-cols-2 gap-8">
             <div class="container-fluid images-wrapper flex flex-col gap-1 items-center h-[80dvh] w-full">
                 <!-- Main Image Display -->
@@ -96,7 +96,9 @@ const selectImage = (index: number) => {
         </div>
 
         <div class="product-description" v-if="product.data.description">
-            <div>{{ product.data.description }}</div>
+            <div class="container-fluid">
+                <div>{{ product.data.description }}</div>
+            </div>
         </div>
 
         <div class="related-products" v-if="related_products.data.length > 0">
