@@ -9,6 +9,8 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\User;
 use App\Models\Brand;
+use App\Models\DeliveryLocation;
+use App\Models\DeliveryArea;
 
 class DashboardController extends Controller
 {
@@ -33,10 +35,10 @@ class DashboardController extends Controller
                     'total_products' => Product::count(),
                     'total_product_categories' => ProductCategory::count(),
                     'total_brands' => Brand::count(),
-                    'total_delivery_locations' => 00,
-                    'total_delivery_areas' => 00,
-                    'total_callbacks' => 00,
-                    'total_unread_callbacks' => 00
+                    'total_delivery_locations' => DeliveryLocation::count(),
+                    'total_delivery_areas' => DeliveryArea::count(),
+                    'total_callbacks' => 1001,
+                    'total_unread_callbacks' => 1001
                 ]
             ]);
         }
