@@ -55,7 +55,8 @@ class ProductCategoryController extends Controller
             $product_category = ProductCategory::create($validated_data);
 
             if ($image && $image instanceof \Illuminate\Http\UploadedFile) {
-                $this->uploadImage($image, $product_category);
+                $filename = $this->uploadImage($image, $product_category);
+                $product_category->update(['image' => $filename]);
             }
 
             DB::commit();
