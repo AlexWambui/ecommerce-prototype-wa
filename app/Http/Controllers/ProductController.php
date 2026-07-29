@@ -92,11 +92,13 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $product_categories = ProductCategory::select('id', 'name')->orderBy('name')->get();
+        $brands = Brand::select('id', 'name')->orderBy('name')->get();
 
         $product->load('category', 'images');
 
         return inertia('app/products/products/Edit', [
             'product' => $product,
+            'brands' => $brands,
             'product_categories' => $product_categories
         ]);
     }
