@@ -55,6 +55,12 @@ class Order extends Model
         return 'partially_paid';
     }
 
+    public function updateAmountPaid()
+    {
+        $this->amount_paid = $this->payments()->sum('amount');
+        $this->save();
+    }
+
     public function loyaltyMember()
     {
         return $this->belongsTo(LoyaltyMember::class);

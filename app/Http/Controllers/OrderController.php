@@ -199,7 +199,11 @@ class OrderController extends Controller
 
     public function edit(Order $order)
     {
-        //
+        $order->load('orderItems', 'payments');
+
+        return inertia('app/orders/orders/Edit', [
+            'order' => new OrderResource($order)
+        ]);
     }
 
     public function update(Request $request, Order $order)

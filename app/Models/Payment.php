@@ -12,6 +12,19 @@ class Payment extends Model
 
     protected $guarded = [];
 
+    protected static function booted()
+    {
+        // When a payment is created or updated
+        static::saved(function ($payment) {
+            $payment->order->updateAmountPaid();
+        });
+
+        // When a payment is deleted
+        static::deleted(function ($payment) {
+            $payment->order->updateAmountPaid();
+        });
+    }
+
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'order_id');
