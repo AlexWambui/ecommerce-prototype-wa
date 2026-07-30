@@ -34,8 +34,8 @@ class LoyaltyMember extends Model
         return $code;
     }
 
-    public function sales(): HasMany
+    public function orders(): HasMany
     {
-        return $this->hasMany(Sale::class);
+        return $this->hasMany(Order::class);
     }
 }
