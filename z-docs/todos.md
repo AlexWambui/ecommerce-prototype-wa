@@ -20,3 +20,5 @@ Sellers
 ❌ dashboard: can view a pie chart showing how customers paid (cash or mobile money)
 
 General
+❌ make users have a customer profile so that we can generate loyalty_id there.
+❌ collect delivery areas from db and ensure total is accurate depending on area. Also, we have to pick location first before we pick a delivery area.
