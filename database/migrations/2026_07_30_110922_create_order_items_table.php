@@ -15,21 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedSmallInteger('quantity')->default(1);
-            $table->unsignedSmallInteger('returned_quantity')->default(0); // for in case a shoe gets returned
-
-            $table->decimal('cost_price', 10, 2);
+            $table->unsignedSmallInteger('returned_quantity')->default(0); // in case a shoe gets returned
+            $table->decimal('cost_price', 10, 2)->default(0);
             $table->decimal('selling_price', 10, 2);
-
-            $table->decimal('discount', 10, 2)->default(0); // discount applied to THIS specific item
             $table->string('discount_type')->nullable(); // 'bulk', 'promo', 'clearance', 'manual'
-
+            $table->decimal('discount', 10, 2)->default(0); // discount applied to THIS specific item
             $table->string('product_name_snapshot');
-            $table->string('product_sku_snapshot');
-
+            $table->string('product_sku_snapshot')->nullable();
             $table->foreignId('product_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
-
             $table->index(['order_id']);
         });
     }

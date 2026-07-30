@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, LayoutGrid, Menu, Search, Users, Barcode, Truck } from '@lucide/vue';
+import { BookOpen, LayoutGrid, Menu, Search, Users, Barcode, Truck, Logs } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
@@ -37,6 +37,7 @@ import { getInitials } from '@/composables/useInitials';
 import { toUrl } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import deliveryLocationRoutes from '@/routes/delivery-locations';
+import orderRoutes from '@/routes/orders';
 import productRoutes from '@/routes/products';
 import userRoutes from '@/routes/users';
 import type { BreadcrumbItem, NavItem } from '@/types';
@@ -74,6 +75,11 @@ const mainNavItems = computed(() => {
     if (isSuperAdmin.value) {
         items.push(
             {
+                title: 'Orders',
+                href: orderRoutes.index(),
+                icon: Logs
+            },
+            {
                 title: 'Users',
                 href: userRoutes.index(),
                 icon: Users
@@ -87,12 +93,17 @@ const mainNavItems = computed(() => {
                 title: 'Deliveries',
                 href: deliveryLocationRoutes.index(),
                 icon: Truck
-            }
+            },
         );
     }
 
     if (isAdmin.value) {
         items.push(
+            {
+                title: 'Orders',
+                href: orderRoutes.index(),
+                icon: Logs
+            },
             {
                 title: 'Users',
                 href: userRoutes.index(),

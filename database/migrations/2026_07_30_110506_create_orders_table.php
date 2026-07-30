@@ -15,39 +15,34 @@ return new class extends Migration
             $table->id();
             $table->uuid()->unique();
             $table->string('order_number');
-            $table->string('order_channel'); // walk_in, shop, tiktok, whatsapp, instagram
+            $table->string('order_channel'); // walk_in, shop, tiktok, whatsapp, instagram, website
             $table->string('order_status'); // pending, partially_paid, paid, cancelled
-
             $table->string('discount_type')->nullable();
             $table->string('discount_code')->nullable();
             $table->decimal('discount', 10, 2)->default(0);
-
             $table->decimal('subtotal', 10, 2)->default(0);
             $table->decimal('delivery_cost', 10, 2)->default(0);
             $table->decimal('tax_amount', 10, 2)->default(0);
             $table->decimal('total_amount', 10, 2)->default(0); // subtotal + delivery
             $table->decimal('amount_paid', 10, 2)->default(0);
-
             $table->text('notes')->nullable();
-
-            // Snapshots of customer info, delivery, pricing at order time (for when user gets anonymized incase of account deletion)
-            // customer: name, email, phone
-            $table->json('customer_details_snapshot')->nullable();
-            // delivery location, delivery area, delivery address, phone
-            $table->json('delivery_details_snapshot')->nullable();
-            // subtotal, shipping, discount, tax, total
-            $table->json('pricing_snapshot')->nullable();
-            // method, phone, transaction_id
-            $table->json('payment_snapshot')->nullable();
-
-            $table->string('customer_loyalty_id')->nullable();
-            $table->foreignId('loyalty_member_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('customer_name')->nullable();
+            $table->string('customer_phone')->nullable();
+            $table->string('customer_email')->nullable();
+            $table->string('delivery_location')->nullable();
+            $table->string('delivery_area')->nullable();
+            $table->string('delivery_address')->nullable();
+            // Snapshots for when user gets anonymized incase of account deletion
+            $table->json('customer_details_snapshot')->nullable(); // name, email, phone
+            $table->json('delivery_details_snapshot')->nullable(); // location, area, address
+            $table->json('pricing_snapshot')->nullable(); // subtotal, shipping, discount, tax, total
+            $table->json('payment_snapshot')->nullable(); // method, phone, transaction_id
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
-
             $table->timestamp('sold_at');
             $table->timestamps();
-
-            $table->index(['customer_loyalty_id']);
+            $table->index(['order_status']);
+            $table->index(['sold_at']);
+            $table->index(['customer_phone']);
         });
     }
 

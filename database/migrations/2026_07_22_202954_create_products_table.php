@@ -27,7 +27,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
 
             // Inventory Tracking
-            $table->unsignedInteger('current_stock')->default(0);
+            $table->unsignedInteger('current_stock')->default(1);
             $table->boolean('track_inventory')->default(true);
             $table->unsignedInteger('low_stock_threshold')->default(5);
 

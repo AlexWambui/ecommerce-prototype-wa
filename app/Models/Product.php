@@ -111,7 +111,7 @@ class Product extends Model
 
     public function getThumbnailUrlAttribute(): string
     {
-        return $this->images->first()?->image_url ?? asset('assets/images/default.png');
+        return $this->images->first()?->image_url ?? asset('assets/images/default-image.png');
     }
 
     public function orderItems(): HasMany

@@ -16,6 +16,10 @@ class Order extends Model
 
     protected $casts = [
         'sold_at' => 'datetime',
+        'customer_details_snapshot' => 'array',
+        'delivery_details_snapshot' => 'array',
+        'pricing_snapshot' => 'array',
+        'payment_snapshot' => 'array',
     ];
 
     public function user(): BelongsTo
@@ -28,14 +32,27 @@ class Order extends Model
         return $this->hasMany(OrderItem::class, 'order_id');
     }
 
-    public function orderDelivery(): HasOne
+    public function orderStatuses(): HasMany
     {
-        return $this->hasOne(OrderDelivery::class);
+        return $this->hasMany(OrderStatus::class, 'order_id');
     }
 
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function getPaymentStatusAttribute(): string
+    {
+        if ($this->amount_paid <= 0) {
+            return 'pending';
+        }
+
+        if ($this->amount_paid >= $this->total_amount) {
+            return 'paid';
+        }
+
+        return 'partially_paid';
     }
 
     public function loyaltyMember()

@@ -13,6 +13,7 @@ use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DeliveryLocationController;
 use App\Http\Controllers\DeliveryAreaController;
+use App\Http\Controllers\OrderController;
 
 Route::inertia('/welcome', 'Welcome')->name('welcome-page');
 
@@ -40,18 +41,18 @@ Route::middleware(['auth', 'verified', 'role:super_admin,admin'])->group(functio
         Route::delete('/{user}', 'destroy')->name('destroy');
     });
 
-    // Route::prefix('sales')
-    //     ->name('sales.')
-    //     ->controller(SaleController::class)
-    //     ->group(function()
-    // {
-    //     Route::get('/', 'index')->name('index');
-    //     Route::get('/create', 'create')->name('create');
-    //     Route::post('/', 'store')->name('store');
-    //     Route::get('/{sale:uuid}/edit', 'edit')->name('edit');
-    //     Route::put('/{sale:uuid}', 'update')->name('update');
-    //     Route::delete('/{sale:uuid}', 'destroy')->name('destroy');
-    // });
+    Route::prefix('orders')
+        ->name('orders.')
+        ->controller(OrderController::class)
+        ->group(function()
+    {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{order:uuid}/edit', 'edit')->name('edit');
+        Route::put('/{order:uuid}', 'update')->name('update');
+        Route::delete('/{order:uuid}', 'destroy')->name('destroy');
+    });
 
     Route::prefix('loyalty-members')
         ->name('loyalty-members.')
