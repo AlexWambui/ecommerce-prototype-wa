@@ -80,14 +80,14 @@ const mainNavItems = computed(() => {
                 icon: Logs
             },
             {
-                title: 'Users',
-                href: userRoutes.index(),
-                icon: Users
-            },
-            {
                 title: 'Products',
                 href: productRoutes.index(),
                 icon: Barcode,
+            },
+            {
+                title: 'Users',
+                href: userRoutes.index(),
+                icon: Users
             },
             {
                 title: 'Deliveries',
@@ -105,14 +105,14 @@ const mainNavItems = computed(() => {
                 icon: Logs
             },
             {
-                title: 'Users',
-                href: userRoutes.index(),
-                icon: Users
-            },
-            {
                 title: 'Products',
                 href: productRoutes.index(),
                 icon: Barcode,
+            },
+            {
+                title: 'Users',
+                href: userRoutes.index(),
+                icon: Users
             },
             {
                 title: 'Deliveries',
