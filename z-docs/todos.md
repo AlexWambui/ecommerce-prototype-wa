@@ -24,5 +24,6 @@ General
 ❌ collect delivery areas from db and ensure total is accurate depending on area. Also, we have to pick location first before we pick a delivery area.
 ❌ show the fiscals summary on the admin dashboard
 ❌ ensure payments are well updated and calculated
-❌ add logic for compressing images when adding new products
+❌ products: add logic for compressing images when adding new products
+❌ products: add logic auto generating skus to make it easier to label shoes
 ❌ use stock count to activate or deactivate products that show on the home and pos pages

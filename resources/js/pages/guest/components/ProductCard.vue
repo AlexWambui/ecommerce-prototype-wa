@@ -4,27 +4,9 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { usePriceFormatter } from '@/composables/usePriceFormatter';
 import AddToCartButton from '@/pages/guest/components/AddToCartButton.vue';
 import productDetailsRoute from '@/routes/product-details';
+import type { Product } from '@/types/product';
 
 const {formatPrice} = usePriceFormatter();
-
-interface ProductImage {
-    url: string;
-    alt: string;
-}
-
-interface Product {
-    id: number;
-    name: string;
-    slug: string;
-    price: number;
-    stock: number;
-    sku: string;
-    category_name: string;
-    is_featured: boolean;
-    is_new: boolean;
-    is_active: boolean;
-    images: ProductImage[];
-}
 
 const props = withDefaults(defineProps<{
     product: Product;
@@ -174,11 +156,11 @@ onUnmounted(() => {
                 <div class="flex items-center gap-1">
                     <span :class="[
                         'inline-block w-2 h-2 rounded-full',
-                        product.stock > 10 ? 'bg-green-500' :
-                        product.stock > 0 ? 'bg-yellow-500' : 'bg-red-500'
+                        product.current_stock > 10 ? 'bg-green-500' :
+                        product.current_stock > 0 ? 'bg-yellow-500' : 'bg-red-500'
                     ]"></span>
                     <span class="text-xs text-gray-500">
-                        {{ product.stock > 0 ? 'In stock' : 'Out of stock' }}
+                        {{ product.current_stock > 0 ? 'In stock' : 'Out of stock' }}
                     </span>
                 </div>
             </div>

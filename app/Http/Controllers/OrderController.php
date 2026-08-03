@@ -41,7 +41,11 @@ class OrderController extends Controller
 
     public function create()
     {
-        $products = Product::orderBy('name')->where('is_active', true)->get();
+        $products = Product::query()
+            ->orderBy('name')
+            ->where('is_active', true)
+            ->where('current_stock', '>', 0)
+            ->get();
 
         return inertia('app/orders/orders/Create', [
             'products' => ProductPOSResource::collection($products)

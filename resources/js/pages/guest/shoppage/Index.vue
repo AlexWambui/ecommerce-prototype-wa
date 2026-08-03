@@ -114,7 +114,7 @@ const getDisplayRange = computed(() => {
             <div v-if="products.data.length === 0" class="text-center py-16">
                 <div class="text-gray-400 text-6xl mb-4">📦</div>
                 <h3 class="text-xl font-semibold text-gray-600 mb-2">No products found</h3>
-                <p class="text-gray-400">Try adjusting your search or filters</p>
+                <p class="text-gray-400">Try adjusting your search or filters. Or check back later!</p>
             </div>
 
             <!-- Pagination -->

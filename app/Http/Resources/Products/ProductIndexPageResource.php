@@ -29,7 +29,7 @@ class ProductIndexPageResource extends JsonResource
             'thumbnail_url' => $this->thumbnail_url,
             'category_name' => $this->category_name,
             'brand_name' => $this->brand_name,
-            'stock' => 30, // TODO: use accurate stock
+            'current_stock' => $this->current_stock,
             'track_inventory' => (bool) $this->track_inventory,
             'low_stock_threshold' => $this->low_stock_threshold,
             'is_featured' => (bool) $this->is_featured,

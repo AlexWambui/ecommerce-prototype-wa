@@ -21,6 +21,7 @@ interface Order {
     customer_phone: string;
     delivery_address: string;
     total_amount: number;
+    amount_paid: number;
     payment_status: string;
     delivery_status: string;
 }
@@ -101,7 +102,8 @@ const hasActiveFilters = computed(() => !!search.value);
                     <TableHead>Name</TableHead>
                     <TableHead>Phone Number</TableHead>
                     <TableHead>Address</TableHead>
-                    <TableHead>Amount</TableHead>
+                    <TableHead>Total</TableHead>
+                    <TableHead>Amount Paid</TableHead>
                     <TableHead>Payment</TableHead>
                     <TableHead>Delivery</TableHead>
                     <TableHead class="actions">Actions</TableHead>
@@ -116,8 +118,27 @@ const hasActiveFilters = computed(() => !!search.value);
                     <TableCell>{{ order.customer_phone }}</TableCell>
                     <TableCell>{{ order.delivery_address }}</TableCell>
                     <TableCell>{{ formatPrice(order.total_amount) }}</TableCell>
-                    <TableCell>{{ order.payment_status }}</TableCell>
-                    <TableCell>{{ order.delivery_status }}</TableCell>
+                    <TableCell>{{ formatPrice(order.amount_paid) }}</TableCell>
+                    <TableCell 
+                        :class="{
+                            'text-green-600': order.payment_status === 'paid',
+                            'text-yellow-600': order.payment_status === 'pending',
+                            'text-blue-600': order.payment_status === 'partially_paid',
+                            'text-red-600': order.payment_status === 'failed',
+                        }"
+                    >
+                        {{ order.payment_status }}
+                    </TableCell>
+                    <TableCell 
+                        :class="{
+                            'text-green-600': order.delivery_status === 'paid',
+                            'text-yellow-600': order.delivery_status === 'pending',
+                            'text-blue-600': order.delivery_status === 'partially_paid',
+                            'text-red-600': order.delivery_status === 'failed',
+                        }"
+                    >
+                        {{ order.delivery_status }}
+                    </TableCell>
                     <TableCell class="actions w-20">
                         <div class="actions-wrapper">
                             <Link :href="orderRoutes.edit(order.uuid).url" class="action edit">

@@ -16,7 +16,7 @@ export interface Product {
     cost_price: number;
     price: number;
     compare_price: number | null;
-    stock: number;
+    current_stock: number;
     sku: string;
     category: string;
     tags: string[];

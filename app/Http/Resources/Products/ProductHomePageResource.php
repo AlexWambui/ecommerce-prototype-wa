@@ -20,7 +20,7 @@ class ProductHomePageResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'price' => $this->price,
-            'stock' => 30,
+            'current_stock' => $this->current_stock,
             'sku' => $this->sku,
             'category_name' => $this->category_name,
             'brand_nane' => $this->brand_name,

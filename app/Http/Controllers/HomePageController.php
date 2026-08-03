@@ -14,7 +14,13 @@ class HomePageController extends Controller
     {
         $brands = Brand::orderBy('name')->where('is_active', true)->get();
 
-        $new_arrivals = Product::where('is_new', true)->where('is_active', true)->with('images')->limit(4)->get();
+        $new_arrivals = Product::query()
+            ->where('is_new', true)
+            ->where('is_active', true)
+            ->where('current_stock', '>', 0)
+            ->with('images')
+            ->limit(4)
+            ->get();
         
         $most_popular = $this->getMostPopularProducts();
 
@@ -30,6 +36,7 @@ class HomePageController extends Controller
         // Get up to 4 featured products
         $featured = Product::where('is_featured', true)
             ->where('is_active', true)
+            ->where('current_stock', '>', 0)
             ->with('images')
             ->limit(4)
             ->get();
@@ -44,6 +51,7 @@ class HomePageController extends Controller
         
         $random = Product::where('is_active', true)
             ->where('is_featured', false) // Exclude featured products
+            ->where('current_stock', '>', 0)
             ->whereNotIn('id', $featured->pluck('id')) // Exclude already selected
             ->with('images')
             ->inRandomOrder()

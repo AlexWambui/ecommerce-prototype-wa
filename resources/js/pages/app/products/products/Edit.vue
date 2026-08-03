@@ -38,6 +38,7 @@ interface Product {
     sku: string | null;
     size: string | null;
     color: string | null;
+    current_stock: number | null;
     is_featured: boolean;
     is_active: boolean;
     is_new: boolean;
@@ -66,6 +67,7 @@ const form = useForm({
     sku: props.product.sku || '',
     size: props.product.size || '',
     color: props.product.color || '',
+    current_stock: props.product.current_stock || 0,
     is_featured: props.product.is_featured,
     is_active: props.product.is_active,
     is_new: props.product.is_new,
@@ -286,6 +288,20 @@ const submitForm = () => {
                             placeholder="Selling Price"
                         />
                         <InputError :message="form.errors.price" />
+                    </div>
+                </div>
+
+                <div class="inputs-group-wrapper">
+                    <div class="inputs-group">
+                        <Label for="current_stock">Current Stock</Label>
+                        <Input
+                            id="current_stock"
+                            v-model="form.current_stock"
+                            type="number"
+                            step="1"
+                            placeholder="Current Stock"
+                        />
+                        <InputError :message="form.errors.current_stock" />
                     </div>
                 </div>
 

@@ -16,6 +16,7 @@ class ShopPageController extends Controller
         $products = Product::query()
             ->search($request->search)
             ->where('is_active', true)
+            ->where('current_stock', '>', 0)
             ->with('images')
             ->orderBy('name')
             ->paginate(30);

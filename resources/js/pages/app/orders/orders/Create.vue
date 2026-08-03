@@ -176,6 +176,12 @@ const submitOrder = () => {
                         </Button>
                     </div>
                 </div>
+
+                <div v-if="!products.data || products.data.length === 0" class="col-span-full text-center py-12">
+                    <div class="text-gray-400 text-6xl mb-4">📦</div>
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">No products available!</h3>
+                    <p class="text-gray-400">There's not stocked products!</p>
+                </div>
             </div>
         </div>
 

@@ -35,6 +35,7 @@ const form = useForm({
     sku: '',
     size: '',
     color: '',
+    current_stock: 1,
     is_featured: false,
     is_active: true,
     is_new: false,
@@ -241,6 +242,20 @@ const submitForm = () => {
                             placeholder="Selling Price"
                         />
                         <InputError :message="form.errors.price" />
+                    </div>
+                </div>
+
+                <div class="inputs-group-wrapper">
+                    <div class="inputs-group">
+                        <Label for="current_stock">Current Stock</Label>
+                        <Input
+                            id="current_stock"
+                            v-model="form.current_stock"
+                            type="number"
+                            step="1"
+                            placeholder="Current Stock"
+                        />
+                        <InputError :message="form.errors.current_stock" />
                     </div>
                 </div>
 
