@@ -14,7 +14,8 @@ orders {
     decimal('subtotal', 10, 2)->default(0);
     decimal('delivery_cost', 10, 2)->default(0);
     decimal('tax_amount', 10, 2)->default(0);
-    decimal('total_amount', 10, 2)->default(0); // subtotal + delivery
+    decimal('total_cost_price', 10, 2)->default(0);
+    decimal('total_selling_price', 10, 2)->default(0); // subtotal + delivery
     decimal('amount_paid', 10, 2)->default(0);
     text('notes')->nullable();
     // delivery details
