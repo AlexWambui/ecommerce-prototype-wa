@@ -25,7 +25,7 @@ defineProps<Props>();
 		<section class="Hero mb-15">
 			<div class="container-fluid grid lg:grid-cols-12 gap-8">
 				<div class="content lg:col-span-7 space-y-4">
-					<h1 class="title font-bold text-l-text lg:text-xl-text uppercase">Walk with confidence <br> Step in Style</h1>
+					<h1 class="title font-bold text-l-text lg:text-xl-text uppercase">Walk with confidence. <br> Step in Style.</h1>
 					<div class="actions bg-amber-400 font-semibold py-2 px-4 inline-block rounded-sm">
 						<Link href="/shop">Start Shopping</Link>
 					</div>

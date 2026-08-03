@@ -104,8 +104,8 @@ onUnmounted(() => {
         <!-- Image Carousel -->
         <div class="relative overflow-hidden bg-gray-100 aspect-square h-70 w-full">
             <img 
-                :src="currentImage?.url || '/assets/images/placeholder-product.jpg'" 
-                :alt="currentImage?.alt || product.name"
+                :src="currentImage?.url || '/assets/images/default-image.png'" 
+                :alt="currentImage?.alt || product.slug"
                 class="w-full h-full object-cover transition-transform duration-500"
                 :class="{ 'scale-105': isHovered }"
                 @mouseenter="isHovered = true"
