@@ -7,7 +7,10 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
+import { usePriceFormatter } from '@/composables/usePriceFormatter';
 import orderRoutes from '@/routes/orders';
+
+const {formatPrice} = usePriceFormatter();
 
 interface OrderItem {
     id: number;
@@ -34,9 +37,9 @@ interface Order {
     delivery_area: string;
     delivery_address: string;
     notes: string;
-    payment_status: string;
     payment_method: string;
-    delivery_status: string;
+    payment_status: string;
+    order_status: string;
     sold_at: string;
     order_items: OrderItem[];
     payments: Payment[];
@@ -53,21 +56,15 @@ const props = defineProps<{
 }>();
 
 const form = useForm({
-    delivery_status: props.order.data.delivery_status,
-    notes: props.order.data.notes,
+    order_status: props.order.data.order_status,
+    notes: props.order.data.notes || '',
     _method: 'PUT',
 });
 
 const submitForm = () => {
-    form.post(
-        orderRoutes.update({
-            order: props.order.data.uuid
-        }).url,
-        {
-            forceFormData: true,
-            preserveScroll: true,
-        }
-    );
+    form.put(orderRoutes.update.url(props.order.data.uuid), {
+        preserveScroll: true
+    });
 };
 </script>
 
@@ -79,42 +76,42 @@ const submitForm = () => {
             <p class="font-bold text-subheading-text">Order Details</p>
             <p class="flex">
                 <span class="text-muted-foreground w-30">Order Number</span>
-                <span>:{{ order.data.order_number }}</span>
+                <span>: {{ order.data.order_number }}</span>
             </p>
 
             <p class="flex">
                 <span class="text-muted-foreground w-30">Name</span>
-                <span>{{ order.data.customer_name }}</span>
+                <span>: {{ order.data.customer_name }}</span>
             </p>
 
             <p class="flex">
                 <span class="text-muted-foreground w-30">Phone</span>
-                <span>{{ order.data.customer_phone }}</span>
+                <span>: {{ order.data.customer_phone }}</span>
             </p>
 
             <p class="flex">
                 <span class="text-muted-foreground w-30">Email</span>
-                <span>{{ order.data.customer_email ?? 'na' }}</span>
+                <span>: {{ order.data.customer_email ?? 'na' }}</span>
             </p>
 
             <p class="flex">
                 <span class="text-muted-foreground w-30">Location</span>
-                <span>{{ order.data.delivery_location }}</span>
+                <span>: {{ order.data.delivery_location }}</span>
             </p>
 
             <p class="flex">
                 <span class="text-muted-foreground w-30">Location</span>
-                <span>{{ order.data.delivery_area }}</span>
+                <span>: {{ order.data.delivery_area }}</span>
             </p>
 
             <p class="flex">
                 <span class="text-muted-foreground w-30">Address</span>
-                <span>{{ order.data.delivery_address }}</span>
+                <span>: {{ order.data.delivery_address }}</span>
             </p>
 
             <p class="flex">
                 <span class="text-muted-foreground w-30">Date</span>
-                <span>{{ order.data.sold_at }}</span>
+                <span>: {{ order.data.sold_at }}</span>
             </p>
         </div>
 
@@ -124,39 +121,39 @@ const submitForm = () => {
                 <div v-for="item in order.data.order_items" :key="item.id" class="items mb-4">
                     <div class="item flex gap-4">
                         <span>{{ item.name }}</span>
-                        <span>{{ item.quantity }} @ {{ item.selling_price }}</span>
-                        <span>= Ksh. {{ item.quantity * item.selling_price }}</span>
+                        <span>{{ item.quantity }} @ {{ formatPrice(item.selling_price) }}</span>
+                        <span>= Ksh. {{ formatPrice(item.quantity * item.selling_price) }}</span>
                     </div>
                 </div>
                 <p class="flex">
                     <span class="text-muted-foreground w-30">Items Total</span>
-                    <span>:{{ order.data.subtotal }}</span>
+                    <span>: {{ formatPrice(order.data.subtotal) }}</span>
                 </p>
                 <p class="flex">
                     <span class="text-muted-foreground w-30">Delivery Cost</span>
-                    <span>:{{ order.data.delivery_cost }}</span>
+                    <span>: {{ formatPrice(order.data.delivery_cost) }}</span>
                 </p>
                 <p class="flex">
                     <span class="text-muted-foreground w-30">Total</span>
-                    <span>:{{ order.data.total_amount }}</span>
+                    <span>: {{ formatPrice(order.data.total_amount) }}</span>
                 </p>
             </div>
 
             <div class="payment-info mt-12">
                 <p class="font-bold text-subheading-text">Payments Summary</p>
                 <p class="flex">
-                    <span class="text-muted-foreground w-30">Amount Paid</span>
-                    <span>:{{ order.data.amount_paid }}</span>
+                    <span class="text-muted-foreground w-32">Amount Paid</span>
+                    <span>: {{ formatPrice(order.data.amount_paid) }}</span>
                 </p>
                 <p class="flex">
-                    <span class="text-muted-foreground w-30">Payment Status</span>
-                    <span>:{{ order.data.payment_status }}</span>
+                    <span class="text-muted-foreground w-32">Payment Status</span>
+                    <span>: {{ order.data.payment_status }}</span>
                 </p>
 
                 <p class="mt-4">Payments Made</p>
                 <p v-for="payment in order.data.payments" :key="payment.id" class="flex">
-                    <span class="text-muted-foreground w-30">{{ payment.payment_method }}</span>
-                    <span>{{ payment.amount }}</span>
+                    <span class="text-muted-foreground w-32">{{ payment.payment_method }}</span>
+                    <span>: {{ formatPrice(payment.amount) }}</span>
                 </p>
             </div>
         </div>
@@ -169,20 +166,23 @@ const submitForm = () => {
             <input type="hidden" name="_method" value="PUT" />
 
             <div class="inputs-group">
-                <Label for="delivery_status">Delivery Status</Label>
-                <Select v-model="form.delivery_status">
+                <Label for="order_status">Order Status</Label>
+                <Select v-model="form.order_status">
                     <SelectTrigger class="w-full">
                         <SelectValue placeholder="Select status" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
+                            <SelectItem :value="null">None</SelectItem>
                             <SelectItem value="pending">Pending</SelectItem>
+                            <SelectItem value="processing">Processing</SelectItem>
                             <SelectItem value="shipped">Shipped</SelectItem>
-                            <SelectItem value="shipped">Delivered</SelectItem>
+                            <SelectItem value="delivered">Delivered</SelectItem>
+                            <SelectItem value="cancelled">Cancelled</SelectItem>
                         </SelectGroup>
                     </SelectContent>
                 </Select>
-                <InputError :message="form.errors.delivery_status" />
+                <InputError :message="form.errors.order_status" />
             </div>
 
             <div class="inputs-group">

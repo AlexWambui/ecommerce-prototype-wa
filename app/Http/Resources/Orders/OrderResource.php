@@ -30,9 +30,10 @@ class OrderResource extends JsonResource
             'amount_paid' => $this->amount_paid,
             'payment_status' => $this->payment_status,
             'order_status' => $this->order_status,
-            'order_items' => $this->orderItems,
-            'payments' => $this->payments,
+            'notes' => $this->notes,
             'sold_at' => $this->sold_at->setTimezone('Africa/Nairobi')->format('d-m-Y H:i'),
+            'payments' => $this->payments,
+            'order_items' => $this->orderItems,
         ];
     }
 }

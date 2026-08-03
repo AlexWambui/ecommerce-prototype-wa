@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderItem;
@@ -12,8 +14,7 @@ use App\Models\OrderStatus;
 use App\Models\Payment;
 use App\Http\Resources\Orders\OrderResource;
 use App\Http\Resources\Products\ProductPOSResource;
-use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
+use App\Http\Requests\Orders\OrderRequest;
 
 class OrderController extends Controller
 {
@@ -52,27 +53,9 @@ class OrderController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(OrderRequest $request)
     {
-        // dd($request);
-
-        $validated = $request->validate([
-            'order_channel' => 'required|string',
-            'customer_name' => 'required|string|max:255',
-            'customer_phone' => 'required|string|max:20',
-            'customer_email' => 'nullable|email|max:255',
-            'delivery_method' => 'required|in:shop,delivery',
-            'location' => 'nullable|string|max:255',
-            'area' => 'nullable|string|max:255',
-            'address' => 'nullable|string|max:255',
-            'delivery_cost' => 'required|numeric|min:0',
-            'payments' => 'required|array|min:1',
-            'payments.*.amount' => 'required|numeric|min:0',
-            'payments.*.method' => 'required|string|in:mpesa,cash',
-            'cart_items' => 'required|array|min:1',
-            'cart_items.*.id' => 'required|exists:products,id',
-            'cart_items.*.price' => 'required|numeric|min:0',
-        ]);
+        $validated = $request->validated();
 
         return DB::transaction(function () use ($validated) {
             // --- CALCULATE TOTALS ---
@@ -228,7 +211,39 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order)
     {
-        //
+        $validated = $request->validate([
+            'order_status' => 'required|string|in:pending,processing,shipped,delivered,cancelled',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+
+            $order->update([
+                'order_status' => $validated['order_status'],
+                'notes' => $validated['notes'],
+            ]);
+
+            DB::commit();
+
+            Inertia::flash('toast', [
+                'type' => "success",
+                'message' => "Order updated successfully"
+            ]);
+
+            return to_route('orders.index');
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            Inertia::flash('toast', [
+                'type' => "error",
+                'message' => "Order failed to update: {$e->getMessage()}"
+            ]);
+
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
     public function destroy(Order $order)
