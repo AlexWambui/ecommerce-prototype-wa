@@ -29,7 +29,7 @@ class OrderResource extends JsonResource
             'total_amount' => $this->total_amount,
             'amount_paid' => $this->amount_paid,
             'payment_status' => $this->payment_status,
-            'delivery_status' => $this->order_status,
+            'order_status' => $this->order_status,
             'order_items' => $this->orderItems,
             'payments' => $this->payments,
             'sold_at' => $this->sold_at->setTimezone('Africa/Nairobi')->format('d-m-Y H:i'),

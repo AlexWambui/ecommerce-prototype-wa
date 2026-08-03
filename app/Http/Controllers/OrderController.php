@@ -66,50 +66,53 @@ class OrderController extends Controller
             'area' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:255',
             'delivery_cost' => 'required|numeric|min:0',
-            'amount_paid' => 'required|numeric|min:0',
             'payments' => 'required|array|min:1',
+            'payments.*.amount' => 'required|numeric|min:0',
+            'payments.*.method' => 'required|string|in:mpesa,cash',
             'cart_items' => 'required|array|min:1',
             'cart_items.*.id' => 'required|exists:products,id',
-            'cart_items.*.price' => 'required|numeric',
+            'cart_items.*.price' => 'required|numeric|min:0',
         ]);
 
         return DB::transaction(function () use ($validated) {
-        
             // --- CALCULATE TOTALS ---
             $subtotal = collect($validated['cart_items'])->sum(fn($item) => $item['price']);
-            $totalAmount = $subtotal + $validated['delivery_cost'];
+            $total_amount = $subtotal + $validated['delivery_cost'];
 
-            $orderStatus = $validated['amount_paid'] >= $totalAmount ? 'paid' : 'partially_paid';
+            // Calculate total paid from payments
+            $total_paid = collect($validated['payments'])->sum('amount');
 
-            $deliveryLocation = 'shop';
-            $deliveryArea = 'shop';
-            $deliveryAddress = 'shop';
+            // Determine payment status
+            $payment_status = $total_paid <= 0 ? 'pending' : ($total_paid >= $total_amount ? 'paid' : 'partially_paid');
 
-            if ($validated['delivery_method'] === 'delivery') {
-                $deliveryLocation = $validated['location'];
-                $deliveryArea = $validated['area'];
-                $deliveryAddress = $validated['address'];
-            }
+            // Set the initial order status based on delivery method
+            $order_status = $validated['delivery_method'] === 'delivery' ? Order::STATUS_PENDING : Order::STATUS_PROCESSING;
+
+            // delivery details
+            $delivery_location = $validated['delivery_method'] === 'shop' ? 'shop' : $validated['location'];
+            $delivery_area = $validated['delivery_method'] === 'shop' ? 'shop' : $validated['area'];
+            $delivery_address = $validated['delivery_method'] === 'shop' ? 'shop' : $validated['address'];
 
             // --- CREATE THE ORDER ---
             $order = Order::create([
                 'order_number' => 'Ord_' . strtoupper(Str::random(6)) . '_' . now()->format('ymd'),
                 'order_channel' => $validated['order_channel'],
-                'order_status' => $orderStatus,
+                'order_status' => $order_status,
                 
                 'subtotal' => $subtotal,
                 'delivery_cost' => $validated['delivery_cost'],
                 'tax_amount' => 0,
-                'total_amount' => $totalAmount,
-                'amount_paid' => $validated['amount_paid'],
+                'total_amount' => $total_amount,
+                'amount_paid' => $total_paid,
 
                 'customer_name' => $validated['customer_name'],
                 'customer_phone' => $validated['customer_phone'],
                 'customer_email' => $validated['customer_email'],
 
-                'delivery_location' => $deliveryLocation,
-                'delivery_area' => $deliveryArea,
-                'delivery_address' => $deliveryAddress,
+                'delivery_method' => $validated['delivery_method'],
+                'delivery_location' => $delivery_location,
+                'delivery_area' => $delivery_area,
+                'delivery_address' => $delivery_address,
                 
                 // Snapshots
                 'customer_details_snapshot' => json_encode([
@@ -125,7 +128,8 @@ class OrderController extends Controller
                 'pricing_snapshot' => json_encode([
                     'subtotal' => $subtotal,
                     'delivery' => $validated['delivery_cost'],
-                    'total' => $totalAmount,
+                    'total' => $total_amount,
+                    'balance' => $total_amount - $total_paid,
                 ]),
                 'payment_snapshot' => json_encode([
                     'methods' => collect($validated['payments'])
@@ -140,8 +144,8 @@ class OrderController extends Controller
 
             OrderStatus::create([
                 'order_id' => $order->id,
-                'status' => $orderStatus,
-                'notes' => 'Order created via ' . $validated['order_channel'],
+                'status' => $order_status,
+                'notes' => 'Order created via ' . $validated['order_channel'] . ' | Payment: ' . $payment_status,
                 'user_id' => Auth::id(), // If admin is logged in
                 'changed_at' => now(),
             ]);
@@ -166,7 +170,6 @@ class OrderController extends Controller
 
                 // Decrease stock
                 $product->decrement('current_stock', 1);
-                // $product->update(['is_active' => false]);
             }
 
             // --- CREATE PAYMENT RECORD ---
@@ -180,6 +183,19 @@ class OrderController extends Controller
                         'payment_status' => 'paid',
                     ]);
                 }
+            }
+
+            // If fully paid and delivery, update order status to processing
+            if ($payment_status === 'paid' && $validated['delivery_method'] === 'delivery') {
+                $order->update(['order_status' => Order::STATUS_PROCESSING]);
+
+                OrderStatus::create([
+                    'order_id' => $order->id,
+                    'status' => Order::STATUS_PROCESSING,
+                    'notes' => 'Order fully paid, ready for processing',
+                    'user_id' => Auth::id(),
+                    'changed_at' => now(),
+                ]);
             }
 
             // --- OPTIONAL: ASSIGN LOYALTY POINTS ---

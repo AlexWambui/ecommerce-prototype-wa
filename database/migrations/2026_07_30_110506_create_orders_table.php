@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid()->unique();
             $table->string('order_number');
             $table->string('order_channel'); // walk_in, shop, tiktok, whatsapp, instagram, website
-            $table->string('order_status'); // pending, partially_paid, paid, cancelled
+            $table->string('order_status'); // pending, processing, shipped, delivered, cancelled
             $table->string('discount_type')->nullable();
             $table->string('discount_code')->nullable();
             $table->decimal('discount', 10, 2)->default(0);
@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('customer_name')->nullable();
             $table->string('customer_phone')->nullable();
             $table->string('customer_email')->nullable();
+            $table->string('delivery_method')->default('shop');
             $table->string('delivery_location')->nullable();
             $table->string('delivery_area')->nullable();
             $table->string('delivery_address')->nullable();

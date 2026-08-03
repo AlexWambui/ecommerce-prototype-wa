@@ -6,7 +6,7 @@ orders {
     uuid()->unique();
     string('order_number');
     string('order_channel'); // walk_in, shop, tiktok, whatsapp, instagram
-    string('order_status'); // current state: pending, partially_paid, paid, shipped, delivered, cancelled
+    string('order_status'); // current state: pending, processing, shipped, delivered, cancelled
     // Financials
     string('discount_type')->nullable();
     string('discount_code')->nullable();
@@ -21,6 +21,7 @@ orders {
     string('customer_name')->nullable();
     string('customer_phone')->nullable();
     string('customer_email')->nullable();
+    string('delivery_method')->default('shop');
     string('delivery_location')->nullable();
     string('delivery_area')->nullable();
     string('delivery_address')->nullable();

@@ -23,7 +23,7 @@ interface Order {
     total_amount: number;
     amount_paid: number;
     payment_status: string;
-    delivery_status: string;
+    order_status: string;
 }
 
 interface Props {
@@ -131,13 +131,14 @@ const hasActiveFilters = computed(() => !!search.value);
                     </TableCell>
                     <TableCell 
                         :class="{
-                            'text-green-600': order.delivery_status === 'paid',
-                            'text-yellow-600': order.delivery_status === 'pending',
-                            'text-blue-600': order.delivery_status === 'partially_paid',
-                            'text-red-600': order.delivery_status === 'failed',
+                            'text-yellow-600': order.order_status === 'pending',
+                            'text-blue-600': order.order_status === 'processing',
+                            'text-purple-600': order.order_status === 'shipped',
+                            'text-green-600': order.order_status === 'delivered',
+                            'text-red-600': order.order_status === 'cancelled',
                         }"
                     >
-                        {{ order.delivery_status }}
+                        {{ order.order_status }}
                     </TableCell>
                     <TableCell class="actions w-20">
                         <div class="actions-wrapper">
