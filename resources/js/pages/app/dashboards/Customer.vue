@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { Head, usePage, Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { usePriceFormatter } from '@/composables/usePriceFormatter';
 
@@ -11,7 +11,7 @@ const { formatPrice } = usePriceFormatter();
 interface Order {
     id: number;
     order_number: string;
-    total_amount: number;
+    total_selling_price: number;
     order_status: number | null;
     order_status_label: string;
     payment_status: number | null;
@@ -70,8 +70,14 @@ const activeOrdersCount = computed(() => {
 });
 
 const activeOrdersText = computed(() => {
-    if (activeOrdersCount.value === 0) return null;
-    if (activeOrdersCount.value === 1) return '1 active order';
+    if (activeOrdersCount.value === 0) {
+        return null;
+    }
+
+    if (activeOrdersCount.value === 1) {
+        return '1 active order';
+    }
+
     return `${activeOrdersCount.value} active orders`;
 });
 </script>
@@ -126,7 +132,7 @@ const activeOrdersText = computed(() => {
                         <TableRow v-for="(order, index) in stats.recent_orders.data" :key="order.id">
                             <TableCell class="id">{{ (stats.recent_orders.meta.current_page - 1) * stats.recent_orders.meta.per_page + index + 1 }}</TableCell>
                             <TableCell>{{ order.order_number }}</TableCell>
-                            <TableCell>{{ order.total_amount }}</TableCell>
+                            <TableCell>{{ order.total_selling_price }}</TableCell>
                             <TableCell :class="{
                                     'font-semibold text-green-600' : order.payment_status_label === 'Paid',
                                     'font-semibold text-red-600' : order.payment_status_label === 'Cancelled',

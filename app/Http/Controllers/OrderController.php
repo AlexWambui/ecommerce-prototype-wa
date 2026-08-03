@@ -60,13 +60,22 @@ class OrderController extends Controller
         return DB::transaction(function () use ($validated) {
             // --- CALCULATE TOTALS ---
             $subtotal = collect($validated['cart_items'])->sum(fn($item) => $item['price']);
-            $total_amount = $subtotal + $validated['delivery_cost'];
+
+            // Total cost price
+            $total_cost_price = 0;
+            foreach ($validated['cart_items'] as $item) {
+                $product = Product::find($item['id']);
+                $total_cost_price += ($product->cost_price ?? 0);
+            }
+
+            // Total selling price (subtotal + delivery)
+            $total_selling_price = $subtotal + $validated['delivery_cost'];
 
             // Calculate total paid from payments
             $total_paid = collect($validated['payments'])->sum('amount');
 
             // Determine payment status
-            $payment_status = $total_paid <= 0 ? 'pending' : ($total_paid >= $total_amount ? 'paid' : 'partially_paid');
+            $payment_status = $total_paid <= 0 ? 'pending' : ($total_paid >= $total_selling_price ? 'paid' : 'partially_paid');
 
             // Set the initial order status based on delivery method
             $order_status = $validated['delivery_method'] === 'delivery' ? Order::STATUS_PENDING : Order::STATUS_PROCESSING;
@@ -85,7 +94,7 @@ class OrderController extends Controller
                 'subtotal' => $subtotal,
                 'delivery_cost' => $validated['delivery_cost'],
                 'tax_amount' => 0,
-                'total_amount' => $total_amount,
+                'total_selling_price' => $total_selling_price,
                 'amount_paid' => $total_paid,
 
                 'customer_name' => $validated['customer_name'],
@@ -111,8 +120,9 @@ class OrderController extends Controller
                 'pricing_snapshot' => json_encode([
                     'subtotal' => $subtotal,
                     'delivery' => $validated['delivery_cost'],
-                    'total' => $total_amount,
-                    'balance' => $total_amount - $total_paid,
+                    'total_cost_price' => $total_cost_price,
+                    'total_selling_price' => $total_selling_price,
+                    'balance' => $total_selling_price - $total_paid,
                 ]),
                 'payment_snapshot' => json_encode([
                     'methods' => collect($validated['payments'])

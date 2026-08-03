@@ -248,7 +248,7 @@ const getTagLabel = (type: string, product: Product) => {
                 </TableRow>
 
                 <TableRow v-if="products.data.length === 0">
-                    <TableCell colspan="9" class="blank-table-row">
+                    <TableCell colspan="11" class="blank-table-row">
                         No products found.
                     </TableCell>
                 </TableRow>

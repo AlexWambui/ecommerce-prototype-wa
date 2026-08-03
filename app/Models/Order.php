@@ -62,7 +62,7 @@ class Order extends Model
             return self::PAYMENT_PENDING;
         }
 
-        if ($total_paid >= $this->total_amount) {
+        if ($total_paid >= $this->total_selling_price) {
             return self::PAYMENT_PAID;
         }
 
@@ -76,12 +76,12 @@ class Order extends Model
 
     public function getBalanceAttribute(): float
     {
-        return max(0, $this->total_amount - $this->total_paid);
+        return max(0, $this->total_selling_price - $this->total_paid);
     }
 
     public function isFullyPaid(): bool
     {
-        return $this->total_paid >= $this->total_amount;
+        return $this->total_paid >= $this->total_selling_price;
     }
 
     public function updateAmountPaid(): void
@@ -104,5 +104,40 @@ class Order extends Model
     public function loyaltyMember()
     {
         return $this->belongsTo(LoyaltyMember::class);
+    }
+
+    public function scopeDelivered($query)
+    {
+        return $query->where('order_status', self::STATUS_DELIVERED);
+    }
+
+    public function scopePaid($query)
+    {
+        return $query->whereColumn('amount_paid', '>=', 'total_selling_price');
+    }
+
+    public function scopeCompleted($query) 
+    {
+        return $query->delivered()->paid();
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('order_status', self::STATUS_PENDING);
+    }
+
+    public function scopeProcessing($query)
+    {
+        return $query->where('order_status', self::STATUS_PROCESSING);
+    }
+
+    public function scopeShipped($query)
+    {
+        return $query->where('order_status', self::STATUS_SHIPPED);
+    }
+
+    public function scopeCancelled($query)
+    {
+        return $query->where('order_status', self::STATUS_CANCELLED);
     }
 }

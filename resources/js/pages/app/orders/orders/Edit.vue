@@ -45,7 +45,7 @@ interface Order {
     payments: Payment[];
     delivery_cost: number;
     subtotal: number;
-    total_amount: number;
+    total_selling_price: number;
     amount_paid: number;
 }
 
@@ -135,7 +135,7 @@ const submitForm = () => {
                 </p>
                 <p class="flex">
                     <span class="text-muted-foreground w-30">Total</span>
-                    <span>: {{ formatPrice(order.data.total_amount) }}</span>
+                    <span>: {{ formatPrice(order.data.total_selling_price) }}</span>
                 </p>
             </div>
 

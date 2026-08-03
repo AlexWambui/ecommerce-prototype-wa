@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { Head, usePage } from '@inertiajs/vue3';
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js';
+import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, ArcElement, PointElement } from 'chart.js';
 import { computed } from 'vue';
-import { Bar, Pie } from 'vue-chartjs';
+import { Line, Pie } from 'vue-chartjs';
+import { usePriceFormatter } from '@/composables/usePriceFormatter';
 
 // Register Chart.js components
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement);
+ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, ArcElement, PointElement);
 
 const page = usePage();
 const user = computed(() => page.props.auth.user);
+const {formatPrice} = usePriceFormatter();
 
 interface Props {
     stats: {
@@ -29,25 +31,31 @@ interface Props {
             mpesa: number;
             cash: number;
         };
+
+        current_ytd_revenue: number;
+        previous_ytd_revenue: number;
+        growth_percentage: number;
     }
 };
 
 const props = defineProps<Props>();
 
 // --- BAR CHART CONFIGURATION ---
-const barChartData = computed(() => ({
+const lineChartData = computed(() => ({
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
         {
             label: 'Sales (Ksh)',
             data: props.stats.monthly_sales,
-            backgroundColor: '#3b82f6', // blue-500
-            borderRadius: 4,
+            borderColor: '#3b82f6', // blue-500
+            backgroundColor: 'rgba(59, 130, 246, 0.1)', // fill color (light blue)
+            borderWidth: 3,
+            fill: true,
         }
     ]
 }));
 
-const barChartOptions = {
+const lineChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -63,7 +71,7 @@ const barChartOptions = {
     scales: {
         y: {
             beginAtZero: true,
-            ticks: { callback: (value: any) => `Ksh ${value.toLocaleString()}` }
+            ticks: { callback: (value: any) => `${value.toLocaleString()}` }
         }
     }
 };
@@ -88,15 +96,22 @@ const pieChartOptions = {
     maintainAspectRatio: false,
     plugins: {
         legend: { 
-            position: 'bottom' as const, 
+            position: 'right' as const, 
         },
         tooltip: {
             callbacks: {
                 label: (context: any) => {
-                    const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
-                    const percentage = ((context.parsed / total) * 100).toFixed(1);
+                    const value = context.parsed;
+                    const dataset = context.dataset;
+                    const total = dataset.data.reduce((a: number, b: number) => a + b, 0);
 
-                    return `Ksh ${context.parsed.toLocaleString()} (${percentage}%)`;
+                    if (total === 0) {
+                        return `${context.label}: Ksh 0 (0%)`;
+                    }
+
+                    const percentage = ((value / total) * 100).toFixed(1);
+
+                    return `Ksh ${value.toLocaleString()} (${percentage}%)`;
                 }
             }
         }
@@ -160,18 +175,79 @@ const pieChartOptions = {
             </div>
         </div>
 
+        <div class="stats-wrapper">
+            <h2 class="mb-4 font-medium">Fiscal Statistics in Ksh. (2026)</h2>
+            <div class="stats grid gap-8 lg:grid-cols-4">
+                <div class="stat p-4 rounded-lg space-y-0.5 border border-border">
+                    <p class="text-[24px] font-bold">{{ formatPrice(stats.current_ytd_revenue) ?? 0 }}</p>
+                    <p>Total Revenue</p>
+                    <div class="extras">
+                        <span 
+                            class="text-sm text-muted-foreground font-medium"
+                            :class="stats.growth_percentage >= 0 ? 'text-green-600' : 'text-red-600'"
+                        >
+                            {{ stats.growth_percentage >= 0 ? '↑' : '↓' }} {{ Math.abs(stats.growth_percentage).toFixed(1) }}% vs. last year
+                        </span>
+                    </div>
+                </div>
+
+                <div class="stat p-4 rounded-lg space-y-0.5 border border-border">
+                    <p class="text-[24px] font-bold">1001</p>
+                    <p title="Revenue - COGS">Gross Profit</p>
+                    <div class="extras">
+                        <span 
+                            class="text-sm text-muted-foreground font-medium"
+                            :class="stats.growth_percentage >= 0 ? 'text-green-600' : 'text-red-600'"
+                        >
+                            1001% vs. last year
+                        </span>
+                    </div>
+                </div>
+
+                <div class="stat p-4 rounded-lg space-y-0.5 border border-border">
+                    <p class="text-[24px] font-bold">1001</p>
+                    <p>Operating Expenses</p>
+                    <div class="extras">
+                        <span 
+                            class="text-sm text-muted-foreground font-medium"
+                            :class="stats.growth_percentage >= 0 ? 'text-green-600' : 'text-red-600'"
+                        >
+                            1001% vs. last year
+                        </span>
+                    </div>
+                </div>
+
+                <div class="stat p-4 rounded-lg space-y-0.5 border border-border text-green-600">
+                    <p class="text-[24px] font-bold">1001</p>
+                    <p title="Gross Profit - Expenses">Net Profit</p>
+                    <div class="extras">
+                        <span 
+                            class="text-sm text-muted-foreground font-medium"
+                            :class="stats.growth_percentage >= 0 ? 'text-green-600' : 'text-red-600'"
+                        >
+                            1001% vs. last year
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- CHARTS SECTION -->
         <div class="charts-wrapper grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Bar Chart (Spans 2 columns) -->
+            <!-- Line Chart (Spans 2 columns) -->
             <div class="chart-card bg-background p-4 rounded-lg border border-border lg:col-span-2 h-80">
-                <h3 class="text-sm font-medium mb-2">Monthly Sales ({{ new Date().getFullYear() }})</h3>
-                <Bar :data="barChartData" :options="barChartOptions" />
+                <h3 class="text-sm font-medium mb-2">Sales Performance in Ksh. ({{ new Date().getFullYear() }})</h3>
+                <div class="h-65">
+                    <Line :data="lineChartData" :options="lineChartOptions" style="height: 100%!important; width: 100%!important;" />
+                </div>
             </div>
 
             <!-- Pie Chart (Spans 1 column) -->
             <div class="chart-card bg-background p-4 rounded-lg border border-border h-80">
                 <h3 class="text-sm font-medium mb-2">Payment Methods</h3>
-                <Pie :data="pieChartData" :options="pieChartOptions" />
+                <div class="h-65">
+                    <Pie :data="pieChartData" :options="pieChartOptions" style="height: 100%!important; width:100%!important" />
+                </div>
             </div>
         </div>
     </div>

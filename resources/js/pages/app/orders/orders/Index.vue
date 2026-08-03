@@ -20,7 +20,7 @@ interface Order {
     customer_name: string;
     customer_phone: string;
     delivery_address: string;
-    total_amount: number;
+    total_selling_price: number;
     amount_paid: number;
     payment_status: string;
     order_status: string;
@@ -117,7 +117,7 @@ const hasActiveFilters = computed(() => !!search.value);
                     <TableCell>{{ order.customer_name }}</TableCell>
                     <TableCell>{{ order.customer_phone }}</TableCell>
                     <TableCell>{{ order.delivery_address }}</TableCell>
-                    <TableCell>{{ formatPrice(order.total_amount) }}</TableCell>
+                    <TableCell>{{ formatPrice(order.total_selling_price) }}</TableCell>
                     <TableCell>{{ formatPrice(order.amount_paid) }}</TableCell>
                     <TableCell 
                         :class="{

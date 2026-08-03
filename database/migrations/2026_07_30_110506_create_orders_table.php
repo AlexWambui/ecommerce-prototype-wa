@@ -23,7 +23,8 @@ return new class extends Migration
             $table->decimal('subtotal', 10, 2)->default(0);
             $table->decimal('delivery_cost', 10, 2)->default(0);
             $table->decimal('tax_amount', 10, 2)->default(0);
-            $table->decimal('total_amount', 10, 2)->default(0); // subtotal + delivery
+            $table->decimal('total_cost_price', 10, 2)->default(0);
+            $table->decimal('total_selling_price', 10, 2)->default(0); // subtotal + delivery
             $table->decimal('amount_paid', 10, 2)->default(0);
             $table->text('notes')->nullable();
             $table->string('customer_name')->nullable();
