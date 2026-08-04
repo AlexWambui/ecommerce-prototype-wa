@@ -187,7 +187,7 @@ const getTagLabel = (type: string, product: Product) => {
                     <TableCell class="w-20"><img :src="product.thumbnail_url" :alt="product.slug"></TableCell>
                     <TableCell :class="!product.is_active ? 'text-red-600 font-bold' : ''" class="max-w-30 overflow-hidden text-ellipsis cursor-help" :title="product.name">{{ product.name }}</TableCell>
                     <TableCell>{{ product.sku ?? '-' }}</TableCell>
-                    <TableCell :class="product.current_stock < 0 ? 'text-red-600 font-bold' : ''">{{ product.current_stock }}</TableCell>
+                    <TableCell :class="product.current_stock <= 0 ? 'text-red-600 font-bold' : ''">{{ product.current_stock }}</TableCell>
                     <TableCell>{{ formatPrice(product.cost_price) }}</TableCell>
                     <TableCell>{{ formatPrice(product.price) }}</TableCell>
                     <TableCell>{{ product.category_name }}</TableCell>

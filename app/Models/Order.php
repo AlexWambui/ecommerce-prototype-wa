@@ -140,4 +140,24 @@ class Order extends Model
     {
         return $query->where('order_status', self::STATUS_CANCELLED);
     }
+
+    public function scopeSearch($query, $search)
+    {
+        if (empty($search)) {
+            return $query;
+        }
+
+        $search_term = '%' . strtolower($search) . '%';
+
+        return $query->where(function ($q) use ($search_term) {
+            $q->whereRaw('LOWER(order_number) LIKE ?', [$search_term])
+            ->orWhereRaw('LOWER(customer_name) LIKE ?', [$search_term])
+            ->orWhereRaw('LOWER(customer_phone) LIKE ?', [$search_term])
+            ->orWhereRaw('LOWER(order_status) LIKE ?', [$search_term])
+            ->orWhereHas('user', function ($user_query) use ($search_term) {
+                $user_query->whereRaw('LOWER(name) LIKE ?', [$search_term])
+                ->orWhereRaw('LOWER(email) LIKE ?', [$search_term]);
+            });
+        });
+    }
 }

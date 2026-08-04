@@ -20,17 +20,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Order::query();
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('order_number', 'like', "%{$search}%")
-                ->orWhere('order_channel', 'like', "%{$search}%");
-            });
-        }
-
-        $orders = $query->latest()->paginate(50);
+        $orders = Order::search($request->search)->latest()->paginate(50);
 
         return inertia('app/orders/orders/Index', [
             'orders' => OrderResource::collection($orders),
