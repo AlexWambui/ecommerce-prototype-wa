@@ -82,6 +82,42 @@ payments {
     timestamps();
     index('transaction_reference');
 }
+
+expenses {
+    id();
+    uuid()->unique();
+    string('title');
+    text('description')->nullable();
+    decimal('amount', 10, 2);
+    date('expense_date');
+
+    string('category'); // Marketing, Packaging, Stock Purchase, Lights, Rent
+
+    string('payment_method')->nullable(); // cash, mpesa, bank_transfer, cheque
+    string('reference_number')->nullable(); // transaction id, cheque number
+    string('bank_account')->nullable(); // account used
+    string('paid_to')->nullable(); // vendor, employee, service provider
+
+    boolean('is_recurring')->default(false);
+    string('recurrence_frequency')->nullable(); // montly, quarterly, yearly
+    date('recurrence_end_date')->nullable();
+
+    foreignId('approved_by')->nullable()->constrained()->nullOnDelete();
+    timestamp('approved_at')->nullable();
+    text('approval_notes')->nullable();
+
+    string('status')->default('pending'); // approved, paid, rejected
+
+    foreignId('user_id')->nullable()->constrained()->nullOnDelete(); // who created it
+
+    timestamps();
+
+    index(['expense_date', 'category']);
+    index(['category', 'status']);
+    index(['expense_date', 'status']);
+    index(['department']);
+    index(['paid_to']);
+}
 ```
 
 ## Guidelines
